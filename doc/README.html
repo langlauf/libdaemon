@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<title>libdaemon 0.2</title>
+<title>libdaemon 0.3</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
-<h1><a name="top">libdaemon 0.2</a></h1>
+<h1><a name="top">libdaemon 0.3</a></h1>
 
-<p><i>Copyright 2003 Lennart Poettering &lt;mzyvoqnrzba [at] itaparica.org&gt;</i></p>
+<p><i>Copyright 2003 Lennart Poettering &lt;mzqnrzba (at) 0pointer (dot) de&gt;</i></p>
 
 <ul class="toc">
     <li><a href="#license">License</a></li>
@@ -42,15 +42,18 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
+<div class="news-date">Mon Oct 20 2003: </div>
+<p class="news-text"><a href="http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.3.tar.gz">Version 0.3</a> released; changes include: documentation update, build fixes, RPM spec file added, added new function int <tt>daemon_pid_file_kill_wait()</tt>.</p>
+
 <div class="news-date">Thu July 10 2003: </div>
-<p class="news-text"><a href="libdaemon-0.2.tar.gz">Version 0.2</a> released; changes include: ugly umask error fix, documentation update</p>
+<p class="news-text"><a href="http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.2.tar.gz">Version 0.2</a> released; changes include: ugly umask error fix, documentation update</p>
 
 <div class="news-date">Mon July 7 2003: </div>
-<p class="news-text"><a href="libdaemon-0.1.tar.gz">Version 0.1</a> released</p>
+<p class="news-text"><a href="http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.1.tar.gz">Version 0.1</a> released</p>
 
 <h2><a name="overview">Overview</a></h2>
 
-<p><tt>libdaemon</tt> is a leightweight C library which eases the writing of UNIX
+<p><tt>libdaemon</tt> is a lightweight C library which eases the writing of UNIX
 daemons. It consists of the following parts:</p>
 
 <ul>
@@ -70,12 +73,11 @@ daemons. It consists of the following parts:</p>
 available. It is not that simple to get it done right and code
 duplication cannot be a goal.</p>
 
-<p><tt>libdaemon</tt> is currently used by <a
-href="http://www.stud.uni-hamburg.de/~lennart/projects/ifplugd/"><tt>ifplugd</tt></a>.</p>
+<p><tt>libdaemon</tt> is currently used by <a href="http://0pointer.de/lennart/projects/ifplugd/"><tt>ifplugd</tt></a>, <a href="http://0pointer.de/lennart/projects/waproamd/"><tt>waproamd</tt></a> and <a href="http://0pointer.de/lennart/projects/aeswepd/"><tt>aeswepd</tt></a>.</p>
 
 <h2><a name="status">Status</a></h2>
 
-<p>Version 0.1 is feature complete.</p>
+<p>Version 0.3 is feature complete.</p>
 
 <h2><a name="documentation">Documentation</a></h2>
 
@@ -104,13 +106,15 @@ compilation and <tt>make install</tt> (as root) for installation of
 
 <h2><a name="download">Download</a></h2>
 
-<p>The newest release is always available from <a href="http://www.stud.uni-hamburg.de/~lennart/projects/libdaemon/">http://www.stud.uni-hamburg.de/~lennart/projects/libdaemon/</a></p>
+<p>The newest release is always available from <a href="http://0pointer.de/lennart/projects/libdaemon/">http://0pointer.de/lennart/projects/libdaemon/</a></p>
 
-<p>The current release is <a href="http://www.stud.uni-hamburg.de/~lennart/projects/libdaemon/libdaemon-0.2.tar.gz">0.2</a></p>
+<p>The current release is <a href="http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.3.tar.gz">0.3</a></p>
+
+<p>Get <tt>libdaemon</tt>'s development sources from the <a href="http://subversion.tigris.org/">Subversion</a> <a href="https://seth.intheinter.net:8081/svn/libdaemon/">repository</a>.</p>
 
 <hr/>
-<address>Lennart Poettering &lt;mzyvoqnrzba [at] itaparica.org&gt;, July 2003</address>
-<div><i>$Id: README.html.in 30 2003-07-10 17:41:30Z lennart $</i></div>
+<address>Lennart Poettering &lt;mzqnrzba (at) 0pointer (dot) de&gt;, October 2003</address>
+<div><i>$Id: README.html.in 43 2003-10-20 22:13:53Z lennart $</i></div>
 
 </body>
 </html>

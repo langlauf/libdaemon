@@ -1,4 +1,4 @@
-# $Id: Makefile.am 30 2003-07-10 17:49:04Z lennart $
+# $Id: Makefile.am 41 2003-10-20 21:53:46Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -17,8 +17,9 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 noinst_DATA = README.html README reference
+EXTRA_DIST = $(noinst_DATA) style.css README.html.in reference
+
 MAINTAINERCLEANFILES = README README.html
-EXTRA_DIST = style.css README README.html README.html.in reference
 CLEANFILES =
 
 if USE_DOXYGEN
@@ -37,7 +38,7 @@ endif
 
 if USE_LYNX
 README: README.html
-	lynx --dump $^ > $@
+	lynx --dump $^ | sed 's,file://localhost/.*/doc/README.html,README,' | sed 's,file://localhost/.*/doc/reference/,reference/,' > $@
 
 CLEANFILES += README
 endif

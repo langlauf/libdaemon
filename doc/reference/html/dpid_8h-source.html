@@ -29,24 +29,28 @@
 00021 
 00022 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
 00023 
-<a name="l00031"></a><a class="code" href="dpid_8h.html#a0">00031</a> <span class="keyword">typedef</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* (*daemon_pid_file_proc_t)(void);
+<a name="l00031"></a><a class="code" href="dpid_8h.html#a1">00031</a> <span class="keyword">typedef</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* (*daemon_pid_file_proc_t)(void);
 00032 
-<a name="l00038"></a><a class="code" href="dpid_8h.html#a1">00038</a> <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="dpid_8h.html#a1">daemon_pid_file_ident</a>;
+<a name="l00038"></a><a class="code" href="dpid_8h.html#a2">00038</a> <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="dpid_8h.html#a2">daemon_pid_file_ident</a>;
 00039 
-<a name="l00044"></a><a class="code" href="dpid_8h.html#a2">00044</a> <span class="keyword">extern</span> <a class="code" href="dpid_8h.html#a0">daemon_pid_file_proc_t</a> <a class="code" href="dpid_8h.html#a2">daemon_pid_file_proc</a>;
+<a name="l00044"></a><a class="code" href="dpid_8h.html#a3">00044</a> <span class="keyword">extern</span> <a class="code" href="dpid_8h.html#a1">daemon_pid_file_proc_t</a> <a class="code" href="dpid_8h.html#a3">daemon_pid_file_proc</a>;
 00045 
-00050 <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="dpid_8h.html#a3">daemon_pid_file_proc_default</a>(<span class="keywordtype">void</span>);
+00050 <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="dpid_8h.html#a4">daemon_pid_file_proc_default</a>(<span class="keywordtype">void</span>);
 00051 
-00055 <span class="keywordtype">int</span> <a class="code" href="dpid_8h.html#a4">daemon_pid_file_create</a>(<span class="keywordtype">void</span>);
+00055 <span class="keywordtype">int</span> <a class="code" href="dpid_8h.html#a5">daemon_pid_file_create</a>(<span class="keywordtype">void</span>);
 00056 
-00060 <span class="keywordtype">int</span> <a class="code" href="dpid_8h.html#a5">daemon_pid_file_remove</a>(<span class="keywordtype">void</span>);
+00060 <span class="keywordtype">int</span> <a class="code" href="dpid_8h.html#a6">daemon_pid_file_remove</a>(<span class="keywordtype">void</span>);
 00061 
-00065 pid_t <a class="code" href="dpid_8h.html#a6">daemon_pid_file_is_running</a>(<span class="keywordtype">void</span>);
+00065 pid_t <a class="code" href="dpid_8h.html#a7">daemon_pid_file_is_running</a>(<span class="keywordtype">void</span>);
 00066 
-00071 <span class="keywordtype">int</span> <a class="code" href="dpid_8h.html#a7">daemon_pid_file_kill</a>(<span class="keywordtype">int</span> s);
+00071 <span class="keywordtype">int</span> <a class="code" href="dpid_8h.html#a8">daemon_pid_file_kill</a>(<span class="keywordtype">int</span> s);
 00072 
-00073 <span class="preprocessor">#endif</span>
-</pre></div><hr><address style="align: right;"><small>Generated on Thu Jul 10 19:49:51 2003 for libdaemon by
+<a name="l00074"></a><a class="code" href="dpid_8h.html#a0">00074</a> <span class="preprocessor">#define DAEMON_PID_FILE_KILL_WAIT_AVAILABLE 1</span>
+00075 <span class="preprocessor"></span>
+00085 <span class="keywordtype">int</span> <a class="code" href="dpid_8h.html#a9">daemon_pid_file_kill_wait</a>(<span class="keywordtype">int</span> s, <span class="keywordtype">int</span> m);
+00086 
+00087 <span class="preprocessor">#endif</span>
+</pre></div><hr><address style="align: right;"><small>Generated on Tue Oct 21 00:15:27 2003 for libdaemon by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.2.18 </small></address>

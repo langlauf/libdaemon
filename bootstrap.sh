@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: bootstrap.sh 20 2003-07-10 16:21:55Z lennart $
+# $Id: bootstrap.sh 41 2003-10-20 21:53:46Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -19,22 +19,20 @@
 
 if [ "x$1" = "xam" ] ; then
     set -ex
-    automake -a -c --foreign
+    automake -a -c
     ./config.status
 else 
     set -ex
-
-    make maintainer-clean || true
-
+    
     rm -rf autom4te.cache
     rm -f config.cache
 
     aclocal
     libtoolize -c --force
     autoheader
-    automake -a -c --foreign
+    automake -a -c
     autoconf -Wall
 
-    ./configure "$@"
+    ./configure --sysconfdir=/etc "$@"
 fi
 

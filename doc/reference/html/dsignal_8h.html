@@ -62,7 +62,7 @@ Definition in file <a class="el" href="dsignal_8h-source.html">dsignal.h</a>.<hr
 Free resources of signal handling, should be called before daemon exit.
 <p>
 <dl compact><dt><b>Examples: </b></dt><dd>
-<a class="el" href="testd_8c-example.html#a13">testd.c</a>.</dl>    </td>
+<a class="el" href="testd_8c-example.html#a14">testd.c</a>.</dl>    </td>
   </tr>
 </table>
 <a name="a4" doxytag="dsignal.h::daemon_signal_fd"></a><p>
@@ -95,7 +95,7 @@ Return the file descriptor the daemon should select() on for reading.
 <p>
 Whenever the descriptor is ready you should call <a class="el" href="dsignal_8h.html#a3">daemon_signal_next()</a> to get the next signal queued. <dl compact><dt><b>Returns: </b></dt><dd>
 The file descriptor or negative on failure </dl><dl compact><dt><b>Examples: </b></dt><dd>
-<a class="el" href="testd_8c-example.html#a11">testd.c</a>.</dl>    </td>
+<a class="el" href="testd_8c-example.html#a12">testd.c</a>.</dl>    </td>
   </tr>
 </table>
 <a name="a0" doxytag="dsignal.h::daemon_signal_init"></a><p>
@@ -142,7 +142,7 @@ The signals to install handlers for. The list should be terminated by -1 </td></
 </table>
 </dl><dl compact><dt><b>Returns: </b></dt><dd>
 zero on success, nonzero on failure </dl><dl compact><dt><b>Examples: </b></dt><dd>
-<a class="el" href="testd_8c-example.html#a10">testd.c</a>.</dl>    </td>
+<a class="el" href="testd_8c-example.html#a11">testd.c</a>.</dl>    </td>
   </tr>
 </table>
 <a name="a1" doxytag="dsignal.h::daemon_signal_install"></a><p>
@@ -212,10 +212,10 @@ Return the next signal recieved.
 <p>
 This function will not block. Instead it returns 0 if no signal is queued. <dl compact><dt><b>Returns: </b></dt><dd>
 The next queued signal if one is queued, zero if none is queued, negative on failure. </dl><dl compact><dt><b>Examples: </b></dt><dd>
-<a class="el" href="testd_8c-example.html#a12">testd.c</a>.</dl>    </td>
+<a class="el" href="testd_8c-example.html#a13">testd.c</a>.</dl>    </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Thu Jul 10 19:49:51 2003 for libdaemon by
+<hr><address style="align: right;"><small>Generated on Tue Oct 21 00:15:28 2003 for libdaemon by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.2.18 </small></address>

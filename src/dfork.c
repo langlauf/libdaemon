@@ -1,4 +1,4 @@
-/* $Id: dfork.c 20 2003-07-10 16:21:55Z lennart $ */
+/* $Id: dfork.c 22 2003-07-10 16:21:55Z lennart $ */
 
 /*
  * This file is part of libdaemon.

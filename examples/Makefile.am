@@ -1,4 +1,4 @@
-# $Id: Makefile.am 6 2003-07-05 15:18:00Z lennart $
+# $Id: Makefile.am 38 2003-07-31 14:18:41Z lennart $
 #
 # This file is part of libdaemon.
 #

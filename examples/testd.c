@@ -1,4 +1,4 @@
-/* $Id: testd.c 7 2003-07-05 15:18:00Z lennart $ */
+/* $Id: testd.c 41 2003-10-20 21:53:46Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -38,7 +38,13 @@ int main(int argc, char *argv[]) {
         int ret;
 
         /* Kill daemon with SIGINT */
+        
+        /* Check if the new function daemon_pid_file_kill_wait() is available, if it is, use it. */
+#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE        
+        if ((ret = daemon_pid_file_kill_wait(SIGINT, 5)) < 0)
+#else
         if ((ret = daemon_pid_file_kill(SIGINT)) < 0)
+#endif
             daemon_log(LOG_WARNING, "Failed to kill daemon");
         
         return ret < 0 ? 1 : 0;
@@ -70,6 +76,7 @@ int main(int argc, char *argv[]) {
             return 255;
         }
 
+        daemon_log(ret != 0 ? LOG_ERR : LOG_INFO, "Daemon returned %i as return value.", ret);
         return ret;
         
     } else { /* The daemon */

@@ -1,4 +1,4 @@
-# $Id: Makefile.am 23 2003-07-10 16:36:08Z lennart $
+# $Id: Makefile.am 41 2003-10-20 21:53:46Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -16,11 +16,11 @@
 # along with libdaemon; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-EXTRA_DIST=bootstrap.sh README LICENSE
+EXTRA_DIST=bootstrap.sh README LICENSE libdaemon.spec
 SUBDIRS=src doc examples
 
-MAINTAINERCLEANFILES = README
-noinst_DATA = README
+MAINTAINERCLEANFILES = README libdaemon.spec
+noinst_DATA = README libdaemon.spec
 
 README:
 	rm -f README
@@ -34,3 +34,8 @@ homepage:
 	cp doc/README.html doc/style.css $$HOME/homepage/lennart/projects/libdaemon
 	cp $$HOME/homepage/lennart/projects/libdaemon/README.html $$HOME/homepage/lennart/projects/libdaemon/index.html
 	cp -av doc/reference/ $$HOME/homepage/lennart/projects/libdaemon/
+
+distcleancheck:
+	@:
+
+.PHONY: homepage distcleancheck

@@ -1,25 +1,46 @@
 # -*- Autoconf -*-
-# $Id: configure.ac 23 2003-07-10 16:34:24Z lennart $
 # Process this file with autoconf to produce a configure script.
 
+# $Id: configure.ac 41 2003-10-20 21:53:46Z lennart $
+
+# This file is part of libdaemon.
+#
+# libdaemon is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# libdaemon is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with libdaemon; if not, write to the Free Software Foundation,
+# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
 AC_PREREQ(2.57)
-AC_INIT([libdaemon], [0.2], [mzqnrzba@itaparica.org])
+AC_INIT([libdaemon], [0.3], [mzqnrzba (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/dfork.c])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE
-AM_MAINTAINER_MODE
+AM_INIT_AUTOMAKE([foreign -Wall])
 
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_LIBTOOL
 
+AC_SUBST(PACKAGE_URL, [http://0pointer.de/lennart/projects/libdaemon/])
+
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
    CFLAGS="$CFLAGS -pipe -Wall"
 fi
 
-# Checks for libraries.
+if type -p stow > /dev/null && test -d /usr/local/stow ; then
+   AC_MSG_NOTICE([*** Found /usr/local/stow: installing to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
+   AC_PREFIX_DEFAULT([/usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION}])
+fi
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -76,5 +97,5 @@ fi
 
 AM_CONDITIONAL([USE_LYNX], [test "x$lynx" = xyes])
 
-AC_CONFIG_FILES([src/Makefile Makefile doc/Makefile doc/README.html doc/doxygen.conf examples/Makefile])
+AC_CONFIG_FILES([src/Makefile Makefile doc/Makefile doc/README.html doc/doxygen.conf examples/Makefile libdaemon.spec])
 AC_OUTPUT

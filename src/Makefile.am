@@ -1,4 +1,4 @@
-# $Id: Makefile.am 20 2003-07-10 16:21:55Z lennart $
+# $Id: Makefile.am 41 2003-10-20 21:53:46Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -27,3 +27,4 @@ libdaemon_la_SOURCES = \
 	dnonblock.c dnonblock.h \
 	dpid.c dpid.h
 
+libdaemon_la_LDFLAGS = -version-info 1:0:1

@@ -1,4 +1,4 @@
-.TH "dpid.h" 3 "10 Jul 2003" "libdaemon" \" -*- nroff -*-
+.TH "dpid.h" 3 "21 Oct 2003" "libdaemon" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,6 +8,14 @@ dpid.h \- Contains an API for manipulating PID files.
 .PP
 \fC#include <sys/types.h>\fP
 .br
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDAEMON_PID_FILE_KILL_WAIT_AVAILABLE\fP   1"
+.br
+.RI "\fIIf this variable is defined to 1 iff \fBdaemon_pid_file_kill_wait()\fP is supported.\fP"
+.in -1c
 .SS "Typedefs"
 
 .in +1c
@@ -39,6 +47,10 @@ dpid.h \- Contains an API for manipulating PID files.
 .RI "int \fBdaemon_pid_file_kill\fP (int s)"
 .br
 .RI "\fIKills a running daemon, if available.\fP"
+.ti -1c
+.RI "int \fBdaemon_pid_file_kill_wait\fP (int s, int m)"
+.br
+.RI "\fISimilar to \fBdaemon_pid_file_kill()\fP but waits until the process died.\fP"
 .in -1c
 .SS "Variables"
 
@@ -59,6 +71,13 @@ Contains an API for manipulating PID files.
 .PP
 .PP
 Definition in file \fBdpid.h\fP.
+.SH "DEFINE DOCUMENTATION"
+.PP 
+.SS "#define DAEMON_PID_FILE_KILL_WAIT_AVAILABLE   1"
+.PP
+If this variable is defined to 1 iff \fBdaemon_pid_file_kill_wait()\fP is supported.
+.PP
+Definition at line 74 of file dpid.h.
 .SH "TYPEDEF DOCUMENTATION"
 .PP 
 .SS "typedef const char*(* daemon_pid_file_proc_t)(void)"
@@ -103,6 +122,28 @@ The signal to send
 \fBReturns: \fP
 .in +1c
 zero on success, nonzero on failure 
+.PP
+\fBExamples: \fP
+.in +1c
+\fBtestd.c\fP.
+.SS "int daemon_pid_file_kill_wait (int s, int m)"
+.PP
+Similar to \fBdaemon_pid_file_kill()\fP but waits until the process died.
+.PP
+This functions is new in libdaemon 0.3. The macro DAEMON_PID_FILE_KILL_WAIT_AVAILABLE is defined iff libdaemon supports this function.
+.PP
+\fBParameters: \fP
+.in +1c
+.TP
+\fB\fIs\fP\fP
+The signal to send 
+.TP
+\fB\fIm\fP\fP
+Seconds to wait at maximum 
+.PP
+\fBReturns: \fP
+.in +1c
+zero on success, nonzero on failure (timeout condition is considered a failure) 
 .PP
 \fBExamples: \fP
 .in +1c

@@ -1,4 +1,4 @@
-.TH "dfork.h" 3 "10 Jul 2003" "libdaemon" \" -*- nroff -*-
+.TH "dfork.h" 3 "21 Oct 2003" "libdaemon" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,7 +18,7 @@ dfork.h \- Contains an API for doing a daemonizing fork().
 .ti -1c
 .RI "int \fBdaemon_retval_init\fP (void)"
 .br
-.RI "\fIInitializes the library for allowing the passing of a return value from the daemon initialization to the parent process.\fP"
+.RI "\fIAllocate and initialize resources required by the daemon_retval_xxx() functions.\fP"
 .ti -1c
 .RI "void \fBdaemon_retval_done\fP (void)"
 .br
@@ -26,7 +26,7 @@ dfork.h \- Contains an API for doing a daemonizing fork().
 .ti -1c
 .RI "int \fBdaemon_retval_wait\fP (int timeout)"
 .br
-.RI "\fIWait the specified amount of seconds for the response of the daemon process and return the integer passed to \fBdaemon_retval_send()\fP in the daemon process.\fP"
+.RI "\fIReturn the value sent by the child via the \fBdaemon_retval_send()\fP function, but wait only the specified number of seconds before timing out and returning a negative number.\fP"
 .ti -1c
 .RI "int \fBdaemon_retval_send\fP (int s)"
 .br
@@ -51,7 +51,7 @@ For the new daemon process STDIN, STDOUT, STDERR are connected to /dev/null, the
 .PP
 \fBReturns: \fP
 .in +1c
-zero on success in the child, the PID of the new daemon process in the parent, nonzero on failure 
+On success, the PID of the child process is returned in the parent's thread of execution, and a 0 is returned in the child's thread of execution. On failure, -1 will be returned in the parent's context, no child process will be created, and errno will be set appropriately. 
 .PP
 \fBExamples: \fP
 .in +1c
@@ -60,16 +60,16 @@ zero on success in the child, the PID of the new daemon process in the parent, n
 .PP
 Frees the resources allocated by \fBdaemon_retval_init()\fP.
 .PP
-This should be called if neither \fBdaemon_retval_wait()\fP nor \fBdaemon_retval_send()\fP is used. If a fork took place, the function should be called in both the parent and the daemon. 
+This should be called if neither \fBdaemon_retval_wait()\fP nor \fBdaemon_retval_send()\fP is called in the current process. The resources allocated by \fBdaemon_retval_init()\fP should be freed in both parent and daemon process. This may be achieved by using \fBdaemon_retval_wait()\fP resp. \fBdaemon_retval_send()\fP, or by using \fBdaemon_retval_done()\fP. 
 .PP
 \fBExamples: \fP
 .in +1c
 \fBtestd.c\fP.
 .SS "int daemon_retval_init (void)"
 .PP
-Initializes the library for allowing the passing of a return value from the daemon initialization to the parent process.
+Allocate and initialize resources required by the daemon_retval_xxx() functions.
 .PP
-Call this before calling any of the other daemon_retval_xxx() functions in the parent, before forking. 
+These functions allow the child to send a value to the parent after completing its initialisation. Call this in the parent before forking. 
 .PP
 \fBReturns: \fP
 .in +1c
@@ -82,7 +82,7 @@ zero on success, nonzero on failure.
 .PP
 Send the specified integer to the parent process.
 .PP
-Should be called just once from the daemon process only. A subsequent call to \fBdaemon_retval_done()\fP in the daemon is ignored. 
+Do not send -1 because this signifies a library error. Should be called just once from the daemon process only. A subsequent call to \fBdaemon_retval_done()\fP in the daemon is ignored. 
 .PP
 \fBParameters: \fP
 .in +1c
@@ -99,19 +99,19 @@ Zero on success, nonzero on failure.
 \fBtestd.c\fP.
 .SS "int daemon_retval_wait (int timeout)"
 .PP
-Wait the specified amount of seconds for the response of the daemon process and return the integer passed to \fBdaemon_retval_send()\fP in the daemon process.
+Return the value sent by the child via the \fBdaemon_retval_send()\fP function, but wait only the specified number of seconds before timing out and returning a negative number.
 .PP
-Should be called just once from the parent process only. A subsequent call to \fBdaemon_retval_done()\fP in the parent is ignored. 
+Should be called just once from the parent process only. A subsequent call to \fBdaemon_retval_done()\fP in the parent is ignored.
 .PP
 \fBParameters: \fP
 .in +1c
 .TP
 \fB\fItimeout\fP\fP
-The timeout in seconds 
+Thetimeout in seconds 
 .PP
 \fBReturns: \fP
 .in +1c
-The integer passed \fBdaemon_retval_send()\fP in the daemon process, or negative on failure. 
+The integer passed \fBdaemon_retval_send()\fP in the daemon process, or -1 on failure. 
 .PP
 \fBExamples: \fP
 .in +1c

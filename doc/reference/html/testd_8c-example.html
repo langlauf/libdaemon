@@ -8,7 +8,7 @@
 <a class="qindex" href="main.html">Main Page</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="globals.html">Globals</a> &nbsp; <a class="qindex" href="examples.html">Examples</a> &nbsp; </center>
 <hr><h1>testd.c</h1> This is an example for the usage of libdaemon
 <p>
-<div class="fragment"><pre><span class="comment">/* $Id: testd.c 7 2003-07-05 15:18:00Z lennart $ */</span>
+<div class="fragment"><pre><span class="comment">/* $Id: testd.c 41 2003-10-20 21:53:46Z lennart $ */</span>
 
 <span class="comment">/*</span>
 <span class="comment"> * This file is part of libdaemon.</span>
@@ -41,45 +41,52 @@
     pid_t pid;
 
     <span class="comment">/* Set indetification string for the daemon for both syslog and PID file */</span>
-    <a class="code" href="dpid_8h.html#a1">daemon_pid_file_ident</a> = <a class="code" href="dlog_8h.html#a1">daemon_log_ident</a> = <a name="a0"></a><a class="code" href="dlog_8h.html#a7">daemon_ident_from_argv0</a>(argv[0]);
+    <a class="code" href="dpid_8h.html#a2">daemon_pid_file_ident</a> = <a class="code" href="dlog_8h.html#a1">daemon_log_ident</a> = <a name="a0"></a><a class="code" href="dlog_8h.html#a7">daemon_ident_from_argv0</a>(argv[0]);
 
     <span class="comment">/* Check if we are called with -k parameter */</span>
     <span class="keywordflow">if</span> (argc &gt;= 2 &amp;&amp; !strcmp(argv[1], <span class="stringliteral">"-k"</span>)) {
         <span class="keywordtype">int</span> ret;
 
         <span class="comment">/* Kill daemon with SIGINT */</span>
-        <span class="keywordflow">if</span> ((ret = <a name="a1"></a><a class="code" href="dpid_8h.html#a7">daemon_pid_file_kill</a>(SIGINT)) &lt; 0)
-            <a name="a2"></a><a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_WARNING, <span class="stringliteral">"Failed to kill daemon"</span>);
+        
+        <span class="comment">/* Check if the new function daemon_pid_file_kill_wait() is available, if it is, use it. */</span>
+<span class="preprocessor">#ifdef DAEMON_PID_FILE_KILL_WAIT_AVAILABLE        </span>
+<span class="preprocessor"></span>        <span class="keywordflow">if</span> ((ret = <a name="a1"></a><a class="code" href="dpid_8h.html#a9">daemon_pid_file_kill_wait</a>(SIGINT, 5)) &lt; 0)
+<span class="preprocessor">#else</span>
+<span class="preprocessor"></span>        <span class="keywordflow">if</span> ((ret = <a name="a2"></a><a class="code" href="dpid_8h.html#a8">daemon_pid_file_kill</a>(SIGINT)) &lt; 0)
+<span class="preprocessor">#endif</span>
+<span class="preprocessor"></span>            <a name="a3"></a><a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_WARNING, <span class="stringliteral">"Failed to kill daemon"</span>);
         
         <span class="keywordflow">return</span> ret &lt; 0 ? 1 : 0;
     }
 
     <span class="comment">/* Check that the daemon is not rung twice a the same time */</span>
-    <span class="keywordflow">if</span> ((pid = <a name="a3"></a><a class="code" href="dpid_8h.html#a6">daemon_pid_file_is_running</a>()) &gt;= 0) {
+    <span class="keywordflow">if</span> ((pid = <a name="a4"></a><a class="code" href="dpid_8h.html#a7">daemon_pid_file_is_running</a>()) &gt;= 0) {
         <a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_ERR, <span class="stringliteral">"Daemon already running on PID file %u"</span>, pid);
         <span class="keywordflow">return</span> 1;
         
     }
 
     <span class="comment">/* Prepare for return value passing from the initialization procedure of the daemon process */</span>
-    <a name="a4"></a><a class="code" href="dfork_8h.html#a1">daemon_retval_init</a>();
+    <a name="a5"></a><a class="code" href="dfork_8h.html#a1">daemon_retval_init</a>();
 
     <span class="comment">/* Do the fork */</span>
-    <span class="keywordflow">if</span> ((pid = <a name="a5"></a><a class="code" href="dfork_8h.html#a0">daemon_fork</a>()) &lt; 0) {
+    <span class="keywordflow">if</span> ((pid = <a name="a6"></a><a class="code" href="dfork_8h.html#a0">daemon_fork</a>()) &lt; 0) {
 
         <span class="comment">/* Exit on error */</span>
-        <a name="a6"></a><a class="code" href="dfork_8h.html#a2">daemon_retval_done</a>();
+        <a name="a7"></a><a class="code" href="dfork_8h.html#a2">daemon_retval_done</a>();
         <span class="keywordflow">return</span> 1;
         
     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (pid) { <span class="comment">/* The parent */</span>
         <span class="keywordtype">int</span> ret;
 
         <span class="comment">/* Wait for 20 seconds for the return value passed from the daemon process */</span>
-        <span class="keywordflow">if</span> ((ret = <a name="a7"></a><a class="code" href="dfork_8h.html#a3">daemon_retval_wait</a>(20)) &lt; 0) {
+        <span class="keywordflow">if</span> ((ret = <a name="a8"></a><a class="code" href="dfork_8h.html#a3">daemon_retval_wait</a>(20)) &lt; 0) {
             <a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_ERR, <span class="stringliteral">"Could not recieve return value from daemon process."</span>);
             <span class="keywordflow">return</span> 255;
         }
 
+        <a class="code" href="dlog_8h.html#a6">daemon_log</a>(ret != 0 ? LOG_ERR : LOG_INFO, <span class="stringliteral">"Daemon returned %i as return value."</span>, ret);
         <span class="keywordflow">return</span> ret;
         
     } <span class="keywordflow">else</span> { <span class="comment">/* The daemon */</span>
@@ -87,16 +94,16 @@
         fd_set fds;
 
         <span class="comment">/* Create the PID file */</span>
-        <span class="keywordflow">if</span> (<a name="a8"></a><a class="code" href="dpid_8h.html#a4">daemon_pid_file_create</a>() &lt; 0) {
+        <span class="keywordflow">if</span> (<a name="a9"></a><a class="code" href="dpid_8h.html#a5">daemon_pid_file_create</a>() &lt; 0) {
             <a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_ERR, <span class="stringliteral">"Could not create PID file (%s)."</span>, strerror(errno));
 
             <span class="comment">/* Send the error condition to the parent process */</span>
-            <a name="a9"></a><a class="code" href="dfork_8h.html#a4">daemon_retval_send</a>(1);
+            <a name="a10"></a><a class="code" href="dfork_8h.html#a4">daemon_retval_send</a>(1);
             <span class="keywordflow">goto</span> finish;
         }
 
         <span class="comment">/* Initialize signal handling */</span>
-        <span class="keywordflow">if</span> (<a name="a10"></a><a class="code" href="dsignal_8h.html#a0">daemon_signal_init</a>(SIGINT, SIGQUIT, SIGHUP, 0) &lt; 0) {
+        <span class="keywordflow">if</span> (<a name="a11"></a><a class="code" href="dsignal_8h.html#a0">daemon_signal_init</a>(SIGINT, SIGQUIT, SIGHUP, 0) &lt; 0) {
             <a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_ERR, <span class="stringliteral">"Could not register signal handlers (%s)."</span>, strerror(errno));
             <a class="code" href="dfork_8h.html#a4">daemon_retval_send</a>(2);
             <span class="keywordflow">goto</span> finish;
@@ -113,7 +120,7 @@
 
         <span class="comment">/* Prepare for select() on the signal fd */</span>
         FD_ZERO(&amp;fds);
-        FD_SET(fd = <a name="a11"></a><a class="code" href="dsignal_8h.html#a4">daemon_signal_fd</a>(), &amp;fds);
+        FD_SET(fd = <a name="a12"></a><a class="code" href="dsignal_8h.html#a4">daemon_signal_fd</a>(), &amp;fds);
         
         <span class="keywordflow">while</span> (!quit) {
             fd_set fds2 = fds;
@@ -134,7 +141,7 @@
                 <span class="keywordtype">int</span> sig;
 
                 <span class="comment">/* Get signal */</span>
-                <span class="keywordflow">if</span> ((sig = <a name="a12"></a><a class="code" href="dsignal_8h.html#a3">daemon_signal_next</a>()) &lt;= 0) {
+                <span class="keywordflow">if</span> ((sig = <a name="a13"></a><a class="code" href="dsignal_8h.html#a3">daemon_signal_next</a>()) &lt;= 0) {
                     <a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_ERR, <span class="stringliteral">"daemon_signal_next() failed."</span>);
                     <span class="keywordflow">break</span>;
                 }
@@ -160,13 +167,13 @@
 finish:
         <a class="code" href="dlog_8h.html#a6">daemon_log</a>(LOG_INFO, <span class="stringliteral">"Exiting..."</span>);
 
-        <a name="a13"></a><a class="code" href="dsignal_8h.html#a2">daemon_signal_done</a>();
-        <a name="a14"></a><a class="code" href="dpid_8h.html#a5">daemon_pid_file_remove</a>();
+        <a name="a14"></a><a class="code" href="dsignal_8h.html#a2">daemon_signal_done</a>();
+        <a name="a15"></a><a class="code" href="dpid_8h.html#a6">daemon_pid_file_remove</a>();
         
         <span class="keywordflow">return</span> 0;
     }
 }
-</pre></div><hr><address style="align: right;"><small>Generated on Thu Jul 10 19:49:51 2003 for libdaemon by
+</pre></div><hr><address style="align: right;"><small>Generated on Tue Oct 21 00:15:27 2003 for libdaemon by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.2.18 </small></address>
