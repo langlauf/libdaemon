@@ -1,0 +1,108 @@
+.TH "dsignal.h" 3 "7 Jul 2003" "libdaemon" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dsignal.h \- Contains the API for serializing signals to a pipe for usage with select() or poll(). 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBdaemon_signal_init\fP (int s,...)"
+.br
+.RI "\fIInstalls signal handlers for the specified signals.\fP"
+.ti -1c
+.RI "int \fBdaemon_signal_install\fP (int s)"
+.br
+.RI "\fIInstall a signal handler for the specified signal.\fP"
+.ti -1c
+.RI "void \fBdaemon_signal_done\fP (void)"
+.br
+.RI "\fIFree resources of signal handling, should be called before daemon exit.\fP"
+.ti -1c
+.RI "int \fBdaemon_signal_next\fP (void)"
+.br
+.RI "\fIReturn the next signal recieved.\fP"
+.ti -1c
+.RI "int \fBdaemon_signal_fd\fP (void)"
+.br
+.RI "\fIReturn the file descriptor the daemon should select() on for reading.\fP"
+.in -1c
+.SH "DETAILED DESCRIPTION"
+.PP 
+Contains the API for serializing signals to a pipe for usage with select() or poll().
+.PP
+ You should register all signals you wish to handle with select() in your main loop with \fBdaemon_signal_init()\fP or \fBdaemon_signal_install()\fP. After that you should sleep on the file descriptor returned by \fBdaemon_signal_fd()\fP and get the next signal recieved with \fBdaemon_signal_next()\fP. You should call \fBdaemon_signal_done()\fP before exiting.
+.PP
+.PP
+Definition in file \fBdsignal.h\fP.
+.SH "FUNCTION DOCUMENTATION"
+.PP 
+.SS "void daemon_signal_done (void)"
+.PP
+Free resources of signal handling, should be called before daemon exit.
+.PP
+\fBExamples: \fP
+.in +1c
+\fBtestd.c\fP.
+.SS "int daemon_signal_fd (void)"
+.PP
+Return the file descriptor the daemon should select() on for reading.
+.PP
+Whenever the descriptor is ready you should call \fBdaemon_signal_next()\fP to get the next signal queued. 
+.PP
+\fBReturns: \fP
+.in +1c
+The file descriptor or negative on failure 
+.PP
+\fBExamples: \fP
+.in +1c
+\fBtestd.c\fP.
+.SS "int daemon_signal_init (int s, ...)"
+.PP
+Installs signal handlers for the specified signals.
+.PP
+\fBParameters: \fP
+.in +1c
+.TP
+\fB\fIs, ...\fP\fP
+The signals to install handlers for. The list should be terminated by -1 
+.PP
+\fBReturns: \fP
+.in +1c
+zero on success, nonzero on failure 
+.PP
+\fBExamples: \fP
+.in +1c
+\fBtestd.c\fP.
+.SS "int daemon_signal_install (int s)"
+.PP
+Install a signal handler for the specified signal.
+.PP
+\fBParameters: \fP
+.in +1c
+.TP
+\fB\fIs\fP\fP
+The signalto install handler for 
+.PP
+\fBReturns: \fP
+.in +1c
+zero onsuccess,nonzero on failure 
+.SS "int daemon_signal_next (void)"
+.PP
+Return the next signal recieved.
+.PP
+This function will not block. Instead it returns 0 if no signal is queued. 
+.PP
+\fBReturns: \fP
+.in +1c
+The next queued signal if one is queued, zero if none is queued, negative on failure. 
+.PP
+\fBExamples: \fP
+.in +1c
+\fBtestd.c\fP.
+.SH "AUTHOR"
+.PP 
+Generated automatically by Doxygen for libdaemon from the source code.
