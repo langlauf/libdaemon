@@ -1,4 +1,4 @@
-/* $Id: dfork.c 57 2004-02-09 15:10:15Z lennart $ */
+/* $Id: dfork.c 62 2004-03-15 15:36:38Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <assert.h>
+#include <sys/ioctl.h>
 
 #include "dfork.h"
 #include "dnonblock.h"
@@ -185,23 +186,35 @@ pid_t daemon_fork(void) {
         setsid();
         umask(0777);
         chdir("/");
-        
+
         if ((pid = fork()) < 0) { // Second fork
             daemon_log(LOG_ERR, "Second fork() failed: %s", strerror(errno));
             goto fail;
 
         } else if (pid == 0) {
+		int tty_fd;
             /* Second child */
             
-            setsid();
+            if (daemon_log_use & DAEMON_LOG_AUTO)
+                daemon_log_use = DAEMON_LOG_SYSLOG;
+        
+	    signal(SIGTTOU, SIG_IGN);
+	    signal(SIGTTIN, SIG_IGN);
+	    signal(SIGTSTP, SIG_IGN);
+	    
+	    setsid();
+	    setpgrp();
             
+	    if ((tty_fd = open("/dev/tty", O_RDWR)) >= 0) {
+		ioctl(tty_fd, TIOCNOTTY, (char*) 0);
+		close(tty_fd);
+	    }
+        
             dpid = getpid();
             if (atomic_write(pipe_fds[1], &dpid, sizeof(dpid)) != sizeof(dpid))
                 goto fail;
             close(pipe_fds[1]);
 
-            if (daemon_log_use & DAEMON_LOG_AUTO)
-                daemon_log_use = DAEMON_LOG_SYSLOG;
 
             return 0;
 

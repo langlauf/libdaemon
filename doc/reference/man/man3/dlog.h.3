@@ -1,4 +1,4 @@
-.TH "dlog.h" 3 "10 Feb 2004" "libdaemon" \" -*- nroff -*-
+.TH "dlog.h" 3 "7 Apr 2004" "Version 0.6" "libdaemon" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,7 +22,7 @@ dlog.h \- Contains a robust API for logging messages.
 
 .in +1c
 .ti -1c
-.RI "void \fBdaemon_log\fP (int prio, const  char *t,...)"
+.RI "void \fBdaemon_log\fP (int prio, const char *t,...)"
 .br
 .RI "\fILog a message using printf format strings using the specified syslog priority. \fP"
 .ti -1c
@@ -92,7 +92,7 @@ The identification string
 \fBExamples: \fP
 .in +1c
 \fBtestd.c\fP.
-.SS "void daemon_log (int prio, const char * t, ...)"
+.SS "void daemon_log (int prio, const char * t,  ...)"
 .PP
 Log a message using printf format strings using the specified syslog priority. \fBParameters:\fP
 .RS 4

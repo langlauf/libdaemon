@@ -1,4 +1,4 @@
-.TH "dexec.h" 3 "10 Feb 2004" "libdaemon" \" -*- nroff -*-
+.TH "dexec.h" 3 "7 Apr 2004" "Version 0.6" "libdaemon" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,7 +19,7 @@ dexec.h \- Contains a robust API for running sub processes with STDOUT and STDER
 
 .in +1c
 .ti -1c
-.RI "int \fBdaemon_exec\fP (const  char *dir, int *ret, const  char *prog,...)"
+.RI "int \fBdaemon_exec\fP (const char *dir, int *ret, const char *prog,...)"
 .br
 .RI "\fIRun the specified executable with the specified arguments in the specified directory and return the return value of the program in the specified pointer. \fP"
 .in -1c
@@ -37,7 +37,7 @@ Definition in file \fBdexec.h\fP.
 If this variable is defined to 1 iff \fBdaemon_pid_file_kill_wait()\fP is supported. Definition at line 31 of file dexec.h.
 .SH "Function Documentation"
 .PP 
-.SS "int daemon_exec (const char * dir, int * ret, const char * prog, ...)"
+.SS "int daemon_exec (const char * dir, int * ret, const char * prog,  ...)"
 .PP
 Run the specified executable with the specified arguments in the specified directory and return the return value of the program in the specified pointer. The calling process is blocked until the child finishes and all child output (either STDOUT or STDIN) has been written to syslog.
 .PP

@@ -1,4 +1,4 @@
-.TH "dpid.h" 3 "10 Feb 2004" "libdaemon" \" -*- nroff -*-
+.TH "dpid.h" 3 "7 Apr 2004" "Version 0.6" "libdaemon" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,7 +22,7 @@ dpid.h \- Contains an API for manipulating PID files.
 
 .in +1c
 .ti -1c
-.RI "typedef const  char *(* \fBdaemon_pid_file_proc_t\fP )(void)"
+.RI "typedef const char *(* \fBdaemon_pid_file_proc_t\fP )(void)"
 .br
 .RI "\fIPrototype of a function for generating the name of a PID file. \fP"
 .in -1c
@@ -30,7 +30,7 @@ dpid.h \- Contains an API for manipulating PID files.
 
 .in +1c
 .ti -1c
-.RI "const  char * \fBdaemon_pid_file_proc_default\fP (void)"
+.RI "const char * \fBdaemon_pid_file_proc_default\fP (void)"
 .br
 .RI "\fIA function for creating a pid file name from daemon_pid_file_ident. \fP"
 .ti -1c
@@ -58,7 +58,7 @@ dpid.h \- Contains an API for manipulating PID files.
 
 .in +1c
 .ti -1c
-.RI "const  char * \fBdaemon_pid_file_ident\fP"
+.RI "const char * \fBdaemon_pid_file_ident\fP"
 .br
 .RI "\fIIdentification string for the PID file name, only used when daemon_pid_file_proc is set to \fBdaemon_pid_file_proc_default()\fP. \fP"
 .ti -1c

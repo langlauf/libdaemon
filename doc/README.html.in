@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8895-15"?> <!-- -*-html-helper-*- -->
+<?xml version="1.0" encoding="iso-8859-15"?> <!-- -*-html-helper-*- -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -41,6 +41,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
+
+<div class="news-date">Wed Apr 7 2004: </div>
+<p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.6.tar.gz">Version 0.6</a> released; changes include: backgrounding fixes, minor other stuff</p>
 
 <div class="news-date">Tue Feb 10 2004: </div>
 <p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.5.tar.gz">Version 0.5</a> released; changes include: signal handling fix, forking fix</p>
@@ -125,8 +128,8 @@ compilation and <tt>make install</tt> (as root) for installation of
 <p>If you want to be notified whenever I release a new version of this software use the subscription feature of <a href="http://freshmeat.net/projects/libdaemon/">Freshmeat</a>.</p>
 
 <hr/>
-<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, February 2004</address>
-<div class="grey"><i>$Id: README.html.in 58 2004-02-09 23:21:51Z lennart $</i></div>
+<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, April 2004</address>
+<div class="grey"><i>$Id: README.html.in 65 2004-04-07 17:41:54Z lennart $</i></div>
 
 </body>
 </html>
