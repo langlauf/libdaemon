@@ -1,4 +1,4 @@
-# $Id: Makefile.am 19 2003-07-06 23:38:14Z lennart $
+# $Id: Makefile.am 23 2003-07-10 16:36:08Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -16,7 +16,7 @@
 # along with libdaemon; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-EXTRA_DIST=bootstrap.sh
+EXTRA_DIST=bootstrap.sh README LICENSE
 SUBDIRS=src doc examples
 
 MAINTAINERCLEANFILES = README

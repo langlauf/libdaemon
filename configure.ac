@@ -1,9 +1,9 @@
 # -*- Autoconf -*-
-# $Id: configure.ac 14 2003-07-06 12:15:37Z lennart $
+# $Id: configure.ac 23 2003-07-10 16:34:24Z lennart $
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([libdaemon], [0.1], [mzqnrzba@itaparica.org])
+AC_INIT([libdaemon], [0.2], [mzqnrzba@itaparica.org])
 AC_CONFIG_SRCDIR([src/dfork.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
@@ -11,6 +11,7 @@ AM_MAINTAINER_MODE
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_LIBTOOL
 
 # If using GCC specifiy some additional parameters

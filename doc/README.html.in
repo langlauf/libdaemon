@@ -42,6 +42,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
+<div class="news-date">Thu July 10 2003: </div>
+<p class="news-text"><a href="libdaemon-0.2.tar.gz">Version 0.2</a> released; changes include: ugly umask error fix, documentation update</p>
+
 <div class="news-date">Mon July 7 2003: </div>
 <p class="news-text"><a href="libdaemon-0.1.tar.gz">Version 0.1</a> released</p>
 
@@ -106,8 +109,8 @@ compilation and <tt>make install</tt> (as root) for installation of
 <p>The current release is <a href="http://www.stud.uni-hamburg.de/~lennart/projects/libdaemon/libdaemon-@PACKAGE_VERSION@.tar.gz">@PACKAGE_VERSION@</a></p>
 
 <hr/>
-<address>Lennart Poettering &lt;mzyvoqnrzba [at] itaparica.org&gt;, July 2003</address><br>
-<i>$Id: README.html.in 20 2003-07-06 23:57:40Z lennart $</i>
+<address>Lennart Poettering &lt;mzyvoqnrzba [at] itaparica.org&gt;, July 2003</address>
+<div><i>$Id: README.html.in 30 2003-07-10 17:41:30Z lennart $</i></div>
 
 </body>
 </html>

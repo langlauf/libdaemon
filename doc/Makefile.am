@@ -1,4 +1,4 @@
-# $Id: Makefile.am 8 2003-07-05 15:14:33Z lennart $
+# $Id: Makefile.am 30 2003-07-10 17:49:04Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -18,7 +18,7 @@
 
 noinst_DATA = README.html README reference
 MAINTAINERCLEANFILES = README README.html
-EXTRA_DIST = style.css README README.html reference
+EXTRA_DIST = style.css README README.html README.html.in reference
 CLEANFILES =
 
 if USE_DOXYGEN
@@ -30,7 +30,6 @@ doxygen:
 	touch doxygen.conf
 	$(MAKE) reference
 
-.PHONY: doxygen
 
 maintainer-clean-local:
 	rm -rf reference
@@ -42,3 +41,13 @@ README: README.html
 
 CLEANFILES += README
 endif
+
+tidy: README.html
+	tidy -e < README.html
+
+if USE_DOXYGEN
+.PHONY: doxygen tidy
+else
+.PHONY: tidy
+endif
+

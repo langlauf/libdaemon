@@ -1,5 +1,21 @@
 #!/bin/sh
-# $Id: bootstrap.sh 17 2003-07-06 23:19:00Z lennart $
+# $Id: bootstrap.sh 20 2003-07-10 16:21:55Z lennart $
+
+# This file is part of libdaemon.
+#
+# libdaemon is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# libdaemon is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with libdaemon; if not, write to the Free Software Foundation,
+# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 if [ "x$1" = "xam" ] ; then
     set -ex

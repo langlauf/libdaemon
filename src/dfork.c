@@ -1,3 +1,5 @@
+/* $Id: dfork.c 20 2003-07-10 16:21:55Z lennart $ */
+
 /*
  * This file is part of libdaemon.
  *
@@ -88,7 +90,7 @@ pid_t daemon_fork(void) {
         }
         
         setsid();
-        umask(777);
+        umask(0777);
         chdir("/");
         
         if ((pid = fork()) < 0) { // Second fork
