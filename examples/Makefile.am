@@ -1,4 +1,4 @@
-# $Id: Makefile.am 38 2003-07-31 14:18:41Z lennart $
+# $Id: Makefile.am 46 2003-11-15 00:57:28Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -18,7 +18,7 @@
 
 noinst_PROGRAMS = testd
 
-AM_CPPFLAGS=-I../src
+AM_CPPFLAGS=-I$(top_srcdir)/src
 
 testd_SOURCES=testd.c
 testd_LDADD=../src/libdaemon.la

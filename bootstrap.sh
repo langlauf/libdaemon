@@ -1,5 +1,5 @@
-#!/bin/sh
-# $Id: bootstrap.sh 41 2003-10-20 21:53:46Z lennart $
+#!/bin/bash
+# $Id: bootstrap.sh 46 2003-11-15 00:57:28Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -17,9 +17,17 @@
 # along with libdaemon; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
+run_versioned() {
+    local P
+    type -p "$1-$2" &> /dev/null && P="$1-$2" || local P="$1"
+
+    shift 2
+    "$P" "$@"
+}
+
 if [ "x$1" = "xam" ] ; then
     set -ex
-    automake -a -c
+    run_versioned automake 1.7 -a -c
     ./config.status
 else 
     set -ex
@@ -27,12 +35,14 @@ else
     rm -rf autom4te.cache
     rm -f config.cache
 
-    aclocal
+    run_versioned aclocal 1.7
     libtoolize -c --force
     autoheader
-    automake -a -c
+    run_versioned automake 1.7 -a -c
     autoconf -Wall
 
     ./configure --sysconfdir=/etc "$@"
+
+    make clean
 fi
 

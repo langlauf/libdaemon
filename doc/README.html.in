@@ -42,6 +42,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
 
+<div class="news-date">Sat Jan 10 2004: </div>
+<p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.4.tar.gz">Version 0.4</a> released; changes include: new module <tt>dexec.c</tt>; added <tt>pkg-config</tt> support.</p>
+
 <div class="news-date">Mon Oct 20 2003: </div>
 <p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.3.tar.gz">Version 0.3</a> released; changes include: documentation update, build fixes, RPM spec file added, added new function int <tt>daemon_pid_file_kill_wait()</tt>.</p>
 
@@ -53,7 +56,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="overview">Overview</a></h2>
 
-<p><tt>libdaemon</tt> is a lightweight C library which eases the writing of UNIX
+<p><tt>libdaemon</tt> is a lightweight C library that eases the writing of UNIX
 daemons. It consists of the following parts:</p>
 
 <ul>
@@ -67,6 +70,8 @@ daemons. It consists of the following parts:</p>
 
   <li>An API for serializing UNIX signals into a pipe for
   usage with <tt>select()</tt> or <tt>poll()</tt></li>
+
+  <li>An API for running subprocesses with STDOUT and STDERR redirected to syslog.</li>
 </ul>
 
 <p>Routines like these are included in most of the daemon software
@@ -113,8 +118,8 @@ compilation and <tt>make install</tt> (as root) for installation of
 <p>Get <tt>libdaemon</tt>'s development sources from the <a href="http://subversion.tigris.org/">Subversion</a> <a href="https://seth.intheinter.net:8081/svn/libdaemon/">repository</a>.</p>
 
 <hr/>
-<address>Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, October 2003</address>
-<div><i>$Id: README.html.in 43 2003-10-20 22:13:53Z lennart $</i></div>
+<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, January 2004</address>
+<div class="grey"><i>$Id: README.html.in 53 2004-01-10 23:26:05Z lennart $</i></div>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-# $Id: Makefile.am 41 2003-10-20 21:53:46Z lennart $
+# $Id: Makefile.am 45 2003-10-22 23:24:13Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -30,7 +30,6 @@ reference: doxygen.conf
 doxygen:
 	touch doxygen.conf
 	$(MAKE) reference
-
 
 maintainer-clean-local:
 	rm -rf reference

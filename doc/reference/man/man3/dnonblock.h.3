@@ -1,8 +1,9 @@
-.TH "dnonblock.h" 3 "21 Oct 2003" "libdaemon" \" -*- nroff -*-
+.TH "dnonblock.h" 3 "11 Jan 2004" "libdaemon" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-dnonblock.h \- Contains a single function used to change a file descriptor to non-blocking mode using fcntl(). 
+dnonblock.h \- Contains a single function used to change a file descriptor to non-blocking mode using fcntl().  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -12,33 +13,32 @@ dnonblock.h \- Contains a single function used to change a file descriptor to no
 .ti -1c
 .RI "int \fBdaemon_nonblock\fP (int fd, int b)"
 .br
-.RI "\fIChange the passed file descriptor to non-blocking or blocking mode, depending on b.\fP"
+.RI "\fIChange the passed file descriptor to non-blocking or blocking mode, depending on b. \fP"
 .in -1c
-.SH "DETAILED DESCRIPTION"
+.SH "Detailed Description"
 .PP 
-Contains a single function used to change a file descriptor to non-blocking mode using fcntl().
-.PP
-.PP
+Contains a single function used to change a file descriptor to non-blocking mode using fcntl(). 
+
+
 .PP
 Definition in file \fBdnonblock.h\fP.
-.SH "FUNCTION DOCUMENTATION"
+.SH "Function Documentation"
 .PP 
 .SS "int daemon_nonblock (int fd, int b)"
 .PP
-Change the passed file descriptor to non-blocking or blocking mode, depending on b.
+Change the passed file descriptor to non-blocking or blocking mode, depending on b. \fBParameters:\fP
+.RS 4
+\fIfd\fP The file descriptor to manipulation 
+.br
+\fIb\fP TRUE if non-blocking mode should be enabled, FALSE if it should be disabled 
+.RE
 .PP
-\fBParameters: \fP
-.in +1c
-.TP
-\fB\fIfd\fP\fP
-The file descriptor to manipulation 
-.TP
-\fB\fIb\fP\fP
-TRUE if non-blocking mode should be enabled, FALSE if it should be disabled 
-.PP
-\fBReturns: \fP
-.in +1c
+\fBReturns:\fP
+.RS 4
 Zero on success, nonzero on failure. 
-.SH "AUTHOR"
+.RE
+.PP
+
+.SH "Author"
 .PP 
 Generated automatically by Doxygen for libdaemon from the source code.

@@ -1,7 +1,7 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# $Id: configure.ac 41 2003-10-20 21:53:46Z lennart $
+# $Id: configure.ac 54 2004-01-11 00:43:42Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -19,32 +19,34 @@
 # along with libdaemon; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-AC_PREREQ(2.57)
-AC_INIT([libdaemon], [0.3], [mzqnrzba (at) 0pointer (dot) de])
+AC_PREREQ(2.59)
+AC_INIT([libdaemon],[0.4],[mzqnrzba (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/dfork.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall])
 
+AC_SUBST(PACKAGE_URL, [http://0pointer.de/lennart/projects/libdaemon/])
+
+if type -p stow > /dev/null && test -d /usr/local/stow ; then
+   AC_MSG_NOTICE([*** Found /usr/local/stow: default install prefix set to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
+   ac_default_prefix="/usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION}"
+fi
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
-AC_PROG_LIBTOOL
-
-AC_SUBST(PACKAGE_URL, [http://0pointer.de/lennart/projects/libdaemon/])
+AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL()
 
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
    CFLAGS="$CFLAGS -pipe -Wall"
 fi
 
-if type -p stow > /dev/null && test -d /usr/local/stow ; then
-   AC_MSG_NOTICE([*** Found /usr/local/stow: installing to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
-   AC_PREFIX_DEFAULT([/usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION}])
-fi
-
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h limits.h stdlib.h string.h syslog.h unistd.h])
+AC_HEADER_SYS_WAIT
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -61,7 +63,7 @@ AC_TYPE_MODE_T
 
 # DOXYGEN documentation generation
 AC_ARG_ENABLE(doxygen,
-        AC_HELP_STRING([--disable-doxygen], [Turn off doxygen usage for documentation generation]),
+        AS_HELP_STRING(--disable-doxygen,Turn off doxygen usage for documentation generation),
 [case "${enableval}" in
   yes) doxygen=yes ;;
   no)  doxygen=no ;;
@@ -80,7 +82,7 @@ AM_CONDITIONAL([USE_DOXYGEN], [test "x$doxygen" = xyes])
 
 # LYNX documentation generation
 AC_ARG_ENABLE(lynx,
-        AC_HELP_STRING([--disable-lynx], [Turn off lynx usage for documentation generation]),
+        AS_HELP_STRING(--disable-lynx,Turn off lynx usage for documentation generation),
 [case "${enableval}" in
   yes) lynx=yes ;;
   no)  lynx=no ;;
@@ -97,5 +99,5 @@ fi
 
 AM_CONDITIONAL([USE_LYNX], [test "x$lynx" = xyes])
 
-AC_CONFIG_FILES([src/Makefile Makefile doc/Makefile doc/README.html doc/doxygen.conf examples/Makefile libdaemon.spec])
+AC_CONFIG_FILES([src/Makefile Makefile doc/Makefile doc/README.html doc/doxygen.conf examples/Makefile libdaemon.spec libdaemon.pc])
 AC_OUTPUT

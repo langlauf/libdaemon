@@ -1,4 +1,4 @@
-# $Id: Makefile.am 41 2003-10-20 21:53:46Z lennart $
+# $Id: Makefile.am 47 2003-12-11 18:56:42Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -21,6 +21,9 @@ SUBDIRS=src doc examples
 
 MAINTAINERCLEANFILES = README libdaemon.spec
 noinst_DATA = README libdaemon.spec
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libdaemon.pc
 
 README:
 	rm -f README
