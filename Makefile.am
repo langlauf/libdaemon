@@ -1,4 +1,4 @@
-# $Id: Makefile.am 61 2004-03-15 02:31:29Z lennart $
+# $Id: Makefile.am 75 2004-12-18 23:42:51Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -17,7 +17,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 EXTRA_DIST=bootstrap.sh README LICENSE libdaemon.spec
-SUBDIRS=src doc examples
+SUBDIRS=libdaemon doc examples
 
 MAINTAINERCLEANFILES = README libdaemon.spec
 noinst_DATA = README libdaemon.spec
@@ -30,10 +30,13 @@ README:
 	$(MAKE) -C doc README
 	ln -s doc/README README
 
-homepage:
+doxygen:
+	$(MAKE) -C doc doxygen
+
+homepage: dist doxygen
 	test -d $$HOME/homepage/private
 	mkdir -p $$HOME/homepage/private/projects/libdaemon
-	cp *.tar.gz $$HOME/homepage/private/projects/libdaemon
+	cp libdaemon-@PACKAGE_VERSION@.tar.gz $$HOME/homepage/private/projects/libdaemon
 	cp doc/README.html doc/style.css $$HOME/homepage/private/projects/libdaemon
 	cp $$HOME/homepage/private/projects/libdaemon/README.html $$HOME/homepage/private/projects/libdaemon/index.html
 	cp -av doc/reference/ $$HOME/homepage/private/projects/libdaemon/

@@ -2,7 +2,7 @@
 
 Summary: lightweight C library which eases the writing of UNIX daemons.
 Name: libdaemon
-Version: 0.6
+Version: 0.7
 Release: 1
 URL: http://www.stud.uni-hamburg.de/users/lennart/projects/libdaemon
 Source: %{name}-%{version}.tar.gz

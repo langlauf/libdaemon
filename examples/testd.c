@@ -1,4 +1,4 @@
-/* $Id: testd.c 47 2003-12-11 18:56:42Z lennart $ */
+/* $Id: testd.c 72 2004-12-18 23:33:34Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -21,12 +21,13 @@
 #include <signal.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/select.h>
 
-#include <dfork.h>
-#include <dsignal.h>
-#include <dlog.h>
-#include <dpid.h>
-#include <dexec.h>
+#include <libdaemon/dfork.h>
+#include <libdaemon/dsignal.h>
+#include <libdaemon/dlog.h>
+#include <libdaemon/dpid.h>
+#include <libdaemon/dexec.h>
 
 int main(int argc, char *argv[]) {
     pid_t pid;

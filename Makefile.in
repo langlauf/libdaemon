@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.am 61 2004-03-15 02:31:29Z lennart $
+# $Id: Makefile.am 75 2004-12-18 23:42:51Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -87,7 +87,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -95,7 +94,6 @@ LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
-NM = @NM@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -106,12 +104,9 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
-SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-USE_DOXYGEN_FALSE = @USE_DOXYGEN_FALSE@
-USE_DOXYGEN_TRUE = @USE_DOXYGEN_TRUE@
 USE_LYNX_FALSE = @USE_LYNX_FALSE@
 USE_LYNX_TRUE = @USE_LYNX_TRUE@
 VERSION = @VERSION@
@@ -136,7 +131,6 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
-have_doxygen = @have_doxygen@
 have_lynx = @have_lynx@
 host = @host@
 host_alias = @host_alias@
@@ -159,7 +153,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 
 EXTRA_DIST = bootstrap.sh README LICENSE libdaemon.spec
-SUBDIRS = src doc examples
+SUBDIRS = libdaemon doc examples
 
 MAINTAINERCLEANFILES = README libdaemon.spec
 noinst_DATA = README libdaemon.spec
@@ -603,10 +597,13 @@ README:
 	$(MAKE) -C doc README
 	ln -s doc/README README
 
-homepage:
+doxygen:
+	$(MAKE) -C doc doxygen
+
+homepage: dist doxygen
 	test -d $$HOME/homepage/private
 	mkdir -p $$HOME/homepage/private/projects/libdaemon
-	cp *.tar.gz $$HOME/homepage/private/projects/libdaemon
+	cp libdaemon-@PACKAGE_VERSION@.tar.gz $$HOME/homepage/private/projects/libdaemon
 	cp doc/README.html doc/style.css $$HOME/homepage/private/projects/libdaemon
 	cp $$HOME/homepage/private/projects/libdaemon/README.html $$HOME/homepage/private/projects/libdaemon/index.html
 	cp -av doc/reference/ $$HOME/homepage/private/projects/libdaemon/

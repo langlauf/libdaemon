@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.am 45 2003-10-22 23:24:13Z lennart $
+# $Id: Makefile.am 70 2004-12-18 23:27:16Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -88,7 +88,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -96,7 +95,6 @@ LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
-NM = @NM@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -107,12 +105,9 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
-SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-USE_DOXYGEN_FALSE = @USE_DOXYGEN_FALSE@
-USE_DOXYGEN_TRUE = @USE_DOXYGEN_TRUE@
 USE_LYNX_FALSE = @USE_LYNX_FALSE@
 USE_LYNX_TRUE = @USE_LYNX_TRUE@
 VERSION = @VERSION@
@@ -137,7 +132,6 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
-have_doxygen = @have_doxygen@
 have_lynx = @have_lynx@
 host = @host@
 host_alias = @host_alias@
@@ -159,8 +153,8 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 
-noinst_DATA = README.html README reference
-EXTRA_DIST = $(noinst_DATA) style.css README.html.in reference
+noinst_DATA = README.html README
+EXTRA_DIST = $(noinst_DATA) style.css README.html.in
 
 MAINTAINERCLEANFILES = README README.html
 CLEANFILES = $(am__append_1)
@@ -321,16 +315,11 @@ uninstall-am: uninstall-info-am
 	uninstall uninstall-am uninstall-info-am
 
 
-@USE_DOXYGEN_TRUE@reference: doxygen.conf
-@USE_DOXYGEN_TRUE@	doxygen doxygen.conf
-@USE_DOXYGEN_TRUE@	touch reference
+doxygen: doxygen.conf
+	doxygen doxygen.conf
 
-@USE_DOXYGEN_TRUE@doxygen:
-@USE_DOXYGEN_TRUE@	touch doxygen.conf
-@USE_DOXYGEN_TRUE@	$(MAKE) reference
-
-@USE_DOXYGEN_TRUE@maintainer-clean-local:
-@USE_DOXYGEN_TRUE@	rm -rf reference
+maintainer-clean-local:
+	rm -rf reference
 
 @USE_LYNX_TRUE@README: README.html
 @USE_LYNX_TRUE@	lynx --dump $^ | sed 's,file://localhost/.*/doc/README.html,README,' | sed 's,file://localhost/.*/doc/reference/,reference/,' > $@
@@ -338,8 +327,7 @@ uninstall-am: uninstall-info-am
 tidy: README.html
 	tidy -e < README.html
 
-@USE_DOXYGEN_TRUE@.PHONY: doxygen tidy
-@USE_DOXYGEN_FALSE@.PHONY: tidy
+.PHONY: doxygen tidy
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
