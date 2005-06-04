@@ -1,7 +1,7 @@
 #ifndef foodaemonforkhfoo
 #define foodaemonforkhfoo
 
-/* $Id: dfork.h 71 2004-12-18 23:29:50Z lennart $ */
+/* $Id: dfork.h 80 2005-06-04 19:15:36Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -27,10 +27,12 @@
 extern "C" {
 #endif
 
-/** \mainpage
+/** \mainpage libdaemon
  *
- * For a brief explanation of libdaemons's purpose, have a look on <a
- * href="../../README.html">the README file</a>. Thank you!
+ * libdaemon
+ * 
+ * For a brief explanation of libdaemons's purpose, have a look on the
+ * README file. Thank you!
  *
  */
 

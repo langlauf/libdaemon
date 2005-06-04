@@ -1,7 +1,7 @@
 #ifndef foodaemonloghfoo
 #define foodaemonloghfoo
 
-/* $Id: dlog.h 71 2004-12-18 23:29:50Z lennart $ */
+/* $Id: dlog.h 79 2005-06-04 19:07:59Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -32,7 +32,7 @@ extern "C" {
  * Contains a robust API for logging messages
  */
 
-/** Specifies where to send the log messages to
+/** Specifies where to send the log messages to. The global variable daemon_log_use takes values of this type.
  */
 enum daemon_log_flags {
     DAEMON_LOG_SYSLOG = 1,   /**< Log messages are written to syslog */

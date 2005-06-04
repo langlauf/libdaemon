@@ -1,4 +1,4 @@
-/* $Id: dlog.c 71 2004-12-18 23:29:50Z lennart $ */
+/* $Id: dlog.c 79 2005-06-04 19:07:59Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -29,7 +29,7 @@
 #include "dlog.h"
 
 enum daemon_log_flags daemon_log_use = DAEMON_LOG_AUTO|DAEMON_LOG_STDERR;
-char* daemon_log_ident = 0;
+char* daemon_log_ident = NULL;
 
 void daemon_log(int prio, const char* template, ...) {
     va_list arglist;

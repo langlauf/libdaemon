@@ -10,13 +10,13 @@
 <body>
 <h1><a name="top">libdaemon @PACKAGE_VERSION@</a></h1>
 
-<p><i>Copyright 2003,2004 Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;</i></p>
+<p><i>Copyright 2003-2005 Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;</i></p>
 
 <ul class="toc">
     <li><a href="#license">License</a></li>
     <li><a href="#news">News</a></li>
     <li><a href="#overview">Overview</a></li>
-    <li><a href="#status">Status</a></li>
+    <li><a href="#status">Current Status</a></li>
     <li><a href="#documentation">Documentation</a></li>
     <li><a href="#requirements">Requirements</a></li>
     <li><a href="#installation">Installation</a></li>
@@ -41,6 +41,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</p>
 
 <h2><a name="news">News</a></h2>
+
+<div class="news-date">Sat Jun 4 2005: </div>
+<p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.8.tar.gz">Version 0.8</a> released; changes include: proper PID file locking</p>
 
 <div class="news-date">Sat Dec 18 2004: </div>
 <p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.7.tar.gz">Version 0.7</a> released; changes include: minor cleanups; C++ compatibility; gcc 2.95 compatiblity</p>
@@ -89,7 +92,7 @@ duplication is not a goal.</p>
 
 <p><tt>libdaemon</tt> is currently used by <a href="http://0pointer.de/lennart/projects/ifplugd/"><tt>ifplugd</tt></a>, <a href="http://0pointer.de/lennart/projects/waproamd/"><tt>waproamd</tt></a>, <a href="http://0pointer.de/lennart/projects/ivam2/"><tt>ivam2</tt></a> and <a href="http://0pointer.de/lennart/projects/aeswepd/"><tt>aeswepd</tt></a>.</p>
 
-<h2><a name="status">Status</a></h2>
+<h2><a name="status">Current Status</a></h2>
 
 <p>Version @PACKAGE_VERSION@ is feature complete.</p>
 
@@ -101,7 +104,7 @@ href="reference/html/index.html">available</a></p>
 <h2><a name="requirements">Requirements</a></h2>
 
 <p><tt>libdaemon</tt> was developed and tested on Debian GNU/Linux
-"testing" from Jul 2003, it should work on most other Linux
+"testing" from July 2003, it should work on most other Linux
 distributions (and maybe Unix versions) since it uses GNU Autoconf and
 GNU libtool for source code configuration and shared library
 management.</p>
@@ -131,8 +134,8 @@ compilation and <tt>make install</tt> (as root) for installation of
 <p>If you want to be notified whenever I release a new version of this software use the subscription feature of <a href="http://freshmeat.net/projects/libdaemon/">Freshmeat</a>.</p>
 
 <hr/>
-<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, December 2004</address>
-<div class="grey"><i>$Id: README.html.in 77 2004-12-18 23:58:46Z lennart $</i></div>
+<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, June 2005</address>
+<div class="grey"><i>$Id: README.html.in 84 2005-06-04 19:40:50Z lennart $</i></div>
 
 </body>
 </html>
