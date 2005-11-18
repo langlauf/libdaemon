@@ -1,29 +1,30 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# $Id: configure.ac 79 2005-06-04 19:07:59Z lennart $
+# $Id: configure.ac 101 2005-11-18 20:39:12Z lennart $
 
 # This file is part of libdaemon.
 #
 # libdaemon is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation; either version 2.1 of the
+# License, or (at your option) any later version.
 #
 # libdaemon is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with libdaemon; if not, write to the Free Software Foundation,
-# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+# You should have received a copy of the GNU Lesser General Public
+# License along with libdaemon; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
+# USA
 
 AC_PREREQ(2.59)
-AC_INIT([libdaemon],[0.8],[mzqnrzba (at) 0pointer (dot) de])
+AC_INIT([libdaemon],[0.9],[mzqnrzba (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([libdaemon/dfork.c])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([foreign -Wall])
+AM_INIT_AUTOMAKE([foreign 1.9 -Wall])
 
 AC_SUBST(PACKAGE_URL, [http://0pointer.de/lennart/projects/libdaemon/])
 
@@ -33,17 +34,37 @@ if type -p stow > /dev/null && test -d /usr/local/stow ; then
 fi
 
 # Checks for programs.
+AC_GNU_SOURCE
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_MAKE_SET
-AC_PROG_LIBTOOL()
+AC_PROG_LIBTOOL
 
 # If using GCC specify some additional parameters
 if test "x$GCC" = "xyes" ; then
    CFLAGS="$CFLAGS -pipe -W -Wall -pedantic"
 
+   # Test whether sys/signal.h can be included when compiled with -std=c99
+   AC_MSG_CHECKING([checking whether sys/signal.h can be included with -std=c99])
+   OLDCFLAGS="$CFLAGS"
+   CFLAGS="-std=c99"
+   AC_TRY_COMPILE([#include <sys/signal.h>],
+                   [int main(void) {
+                   struct sigaction sa; 
+                   sa.sa_handler = 0;
+		   return 0;
+		   };], use_stdc99=yes, use_stdc99=no)
+
+   if test x"$use_stdc99" = xyes; then
+      CFLAGS="-std=c99 $OLDCFLAGS"
+      AC_MSG_RESULT([yes])
+   else
+      AC_MSG_RESULT([no])
+      CFLAGS="$OLDCFLAGS"
+   fi
+
    AC_LANG_CONFTEST([int main() {}])
-   $CC -c conftest.c -std=c99 -Wno-unused-parameter $CFLAGS > /dev/null 2> /dev/null && CFLAGS="$CFLAGS -std=c99 -Wno-unused-parameter"
+   $CC -c conftest.c -Wno-unused-parameter $CFLAGS > /dev/null 2> /dev/null && CFLAGS="$CFLAGS -Wno-unused-parameter"
    rm -f conftest.o
 fi
 

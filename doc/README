@@ -1,5 +1,5 @@
 
-                                 libdaemon 0.8
+                                 libdaemon 0.9
 
    Copyright 2003-2005 Lennart Poettering <mzqnrzba (at) 0pointer (dot)
    de>
@@ -15,60 +15,68 @@
 
 License
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or (at
-   your option) any later version.
+   This library is free software; you can redistribute it and/or modify
+   it under the terms of the GNU Lesser General Public License as
+   published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful, but
+   This library is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-   General Public License for more details.
+   Lesser General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
+   USA
 
 News
 
+   Fri Nov 18 2005:
+
+   [10]Version 0.9 released; changes include: portability (FreeBSD,
+   NetBSD, OpenBSD, Darwin, Solaris, Cygwin); some minor header file
+   cleanups; fix access mode of PID files; other cleanups; license change
+   from GPL to LGPL
+
    Sat Jun 4 2005:
 
-   [10]Version 0.8 released; changes include: proper PID file locking
+   [11]Version 0.8 released; changes include: proper PID file locking
 
    Sat Dec 18 2004:
 
-   [11]Version 0.7 released; changes include: minor cleanups; C++
+   [12]Version 0.7 released; changes include: minor cleanups; C++
    compatibility; gcc 2.95 compatiblity
 
    Wed Apr 7 2004:
 
-   [12]Version 0.6 released; changes include: backgrounding fixes, minor
+   [13]Version 0.6 released; changes include: backgrounding fixes, minor
    other stuff
 
    Tue Feb 10 2004:
 
-   [13]Version 0.5 released; changes include: signal handling fix,
+   [14]Version 0.5 released; changes include: signal handling fix,
    forking fix
 
    Sat Jan 10 2004:
 
-   [14]Version 0.4 released; changes include: new module dexec.c; added
+   [15]Version 0.4 released; changes include: new module dexec.c; added
    pkg-config support.
 
    Mon Oct 20 2003:
 
-   [15]Version 0.3 released; changes include: documentation update, build
+   [16]Version 0.3 released; changes include: documentation update, build
    fixes, RPM spec file added, added new function int
    daemon_pid_file_kill_wait().
 
    Thu July 10 2003:
 
-   [16]Version 0.2 released; changes include: ugly umask error fix,
+   [17]Version 0.2 released; changes include: ugly umask error fix,
    documentation update
 
    Mon July 7 2003:
 
-   [17]Version 0.1 released
+   [18]Version 0.1 released
 
 Overview
 
@@ -87,23 +95,26 @@ Overview
    APIs like these are used in most daemon software available. It is not
    that simple to get it done right and code duplication is not a goal.
 
-   libdaemon is currently used by [18]ifplugd, [19]waproamd, [20]ivam2
-   and [21]aeswepd.
+   libdaemon is currently used by [19]ifplugd, [20]Avahi, [21]ivam2,
+   [22]Nautilus-Share and [23]aeswepd.
 
 Current Status
 
-   Version 0.8 is feature complete.
+   Version 0.9 is feature complete.
 
 Documentation
 
-   An extensive API reference is [22]available
+   An extensive API reference is [24]available
 
 Requirements
 
    libdaemon was developed and tested on Debian GNU/Linux "testing" from
-   July 2003, it should work on most other Linux distributions (and maybe
+   July 2003, it should work on most other Linux distributions (and some
    Unix versions) since it uses GNU Autoconf and GNU libtool for source
    code configuration and shared library management.
+
+   libdaemon is known to work on modern Linux systems, FreeBSD, NetBSD,
+   OpenBSD, Darwin, Solaris and Windows/Cygwin.
 
 Installation
 
@@ -112,30 +123,33 @@ Installation
    source tree. After that you should run make for compilation and make
    install (as root) for installation of libdaemon.
 
+   Please use gmake instead of traditional make for compilation on
+   non-Linux systems.
+
 Acknowledgements
 
-   No special acknowledgements at this time, I am sorry.
+   Sebastien Estienne, for a lot of portability work.
 
 Download
 
    The newest release is always available from
-   [23]http://0pointer.de/lennart/projects/libdaemon/
+   [25]http://0pointer.de/lennart/projects/libdaemon/
 
-   Get libdaemon's development sources from the [24]Subversion
-   [25]repository ([26]viewcvs):
-svn checkout svn://seth.intheinter.net/libdaemon/trunk libdaemon
+   Get libdaemon's development sources from the [26]Subversion
+   [27]repository ([28]viewcvs):
+svn checkout svn://svn.0pointer.de/libdaemon/trunk libdaemon
 
    You may find an up to date Debian package of libdaemon on the
-   [27]Debian package repository.
+   [29]Debian package repository.
 
    If you want to be notified whenever I release a new version of this
-   software use the subscription feature of [28]Freshmeat.
+   software use the subscription feature of [30]Freshmeat.
      _________________________________________________________________
 
 
-    Lennart Poettering <mzqnrzba (at) 0pointer (dot) de>, June 2005
+    Lennart Poettering <mzqnrzba (at) 0pointer (dot) de>, November 2005
 
-   $Id: README.html.in 84 2005-06-04 19:40:50Z lennart $
+   $Id: README.html.in 104 2005-11-18 20:47:33Z lennart $
 
 References
 
@@ -148,22 +162,24 @@ References
    7. README#installation
    8. README#acks
    9. README#download
-  10. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.8.tar.gz
-  11. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.7.tar.gz
-  12. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.6.tar.gz
-  13. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.5.tar.gz
-  14. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.4.tar.gz
-  15. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.3.tar.gz
-  16. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.2.tar.gz
-  17. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.1.tar.gz
-  18. http://0pointer.de/lennart/projects/ifplugd/
-  19. http://0pointer.de/lennart/projects/waproamd/
-  20. http://0pointer.de/lennart/projects/ivam2/
-  21. http://0pointer.de/lennart/projects/aeswepd/
-  22. reference/html/index.html
-  23. http://0pointer.de/lennart/projects/libdaemon/
-  24. http://subversion.tigris.org/
-  25. svn://seth.intheinter.net/libdaemon
-  26. http://0pointer.de/cgi-bin/viewcvs.cgi/?root=libdaemon
-  27. http://packages.debian.org/libdaemon0
-  28. http://freshmeat.net/projects/libdaemon/
+  10. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.9.tar.gz
+  11. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.8.tar.gz
+  12. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.7.tar.gz
+  13. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.6.tar.gz
+  14. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.5.tar.gz
+  15. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.4.tar.gz
+  16. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.3.tar.gz
+  17. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.2.tar.gz
+  18. http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.1.tar.gz
+  19. http://0pointer.de/lennart/projects/ifplugd/
+  20. http://freedesktop.org/Software/Avahi
+  21. http://0pointer.de/lennart/projects/ivam2/
+  22. http://gentoo.ovibes.net/nautilus-share/mediawiki-1.4.4/index.php/Accueil
+  23. http://0pointer.de/lennart/projects/aeswepd/
+  24. reference/html/index.html
+  25. http://0pointer.de/lennart/projects/libdaemon/
+  26. http://subversion.tigris.org/
+  27. svn://svn.0pointer.de/libdaemon
+  28. http://0pointer.de/cgi-bin/viewcvs.cgi/?root=libdaemon
+  29. http://packages.debian.org/libdaemon0
+  30. http://freshmeat.net/projects/libdaemon/

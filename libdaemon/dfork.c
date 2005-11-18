@@ -1,21 +1,22 @@
-/* $Id: dfork.c 71 2004-12-18 23:29:50Z lennart $ */
+/* $Id: dfork.c 101 2005-11-18 20:39:12Z lennart $ */
 
 /*
  * This file is part of libdaemon.
  *
- * libdaemon is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * libdaemon is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
  *
  * libdaemon is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with libdaemon; if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with libdaemon; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
  */
 
 #ifdef HAVE_CONFIG_H
@@ -95,7 +96,7 @@ static ssize_t atomic_write(int fd, const void *d, size_t l) {
         }
 
         t += r;
-        d = (char*) d + r;
+        d = (const char*) d + r;
         l -= r;
     }
 
@@ -149,8 +150,8 @@ pid_t daemon_fork(void) {
         return (pid_t) -1;
     }
 
-    if ((pid = fork()) < 0) { // First fork
-        daemon_log(LOG_ERR, "First fork() failed: %s\n", strerror(errno));
+    if ((pid = fork()) < 0) { /* First fork */
+        daemon_log(LOG_ERR, "First fork() failed: %s", strerror(errno));
         close(pipe_fds[0]);
         close(pipe_fds[1]);
         sigaction(SIGCHLD, &sa_old, NULL);
@@ -193,7 +194,7 @@ pid_t daemon_fork(void) {
         umask(0777);
         chdir("/");
 
-        if ((pid = fork()) < 0) { // Second fork
+        if ((pid = fork()) < 0) { /* Second fork */
             daemon_log(LOG_ERR, "Second fork() failed: %s", strerror(errno));
             goto fail;
 
@@ -209,13 +210,13 @@ pid_t daemon_fork(void) {
 	    signal(SIGTSTP, SIG_IGN);
 	    
 	    setsid();
-	    setpgrp();
-            
+	    setpgid(0,0);
+#ifdef TIOCNOTTY
 	    if ((tty_fd = open("/dev/tty", O_RDWR)) >= 0) {
 		ioctl(tty_fd, TIOCNOTTY, NULL);
 		close(tty_fd);
 	    }
-        
+#endif
             dpid = getpid();
             if (atomic_write(pipe_fds[1], &dpid, sizeof(dpid)) != sizeof(dpid))
                 goto fail;
@@ -227,7 +228,7 @@ pid_t daemon_fork(void) {
         } else {
             /* Second father */
             close(pipe_fds[1]);
-            exit(0);
+            _exit(0);
         }
             
     fail:
@@ -235,7 +236,7 @@ pid_t daemon_fork(void) {
         if (atomic_write(pipe_fds[1], &dpid, sizeof(dpid)) != sizeof(dpid))
             daemon_log(LOG_ERR, "Failed to write error PID.");
         close(pipe_fds[1]);
-        exit(0);
+        _exit(0);
 
     } else {
         /* First father */
@@ -285,7 +286,7 @@ int daemon_retval_send(int i) {
     if (r != sizeof(i)) {
 
         if (r < 0)
-            daemon_log(LOG_ERR, "read() failed while writing return value to pipe: %s", strerror(errno));
+            daemon_log(LOG_ERR, "write() failed while writing return value to pipe: %s", strerror(errno));
         else
             daemon_log(LOG_ERR, "write() too short while writing return value from pipe");
         

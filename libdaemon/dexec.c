@@ -3,19 +3,20 @@
 /*
  * This file is part of libdaemon.
  *
- * libdaemon is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * libdaemon is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
  *
  * libdaemon is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with libdaemon; if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with libdaemon; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
  */
 
 #ifdef HAVE_CONFIG_H
@@ -34,6 +35,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <assert.h>
 
 #include "dlog.h"
 #include "dsignal.h"
@@ -50,6 +52,8 @@ int daemon_exec(const char *dir, int *ret, const char *prog, ...) {
     int sigfd, r;
     fd_set fds;
     va_list ap;
+
+    assert(daemon_signal_fd() >= 0);
 
     if (pipe(p) < 0) {
         daemon_log(LOG_ERR, "pipe() failed: %s", strerror(errno));
@@ -98,7 +102,7 @@ int daemon_exec(const char *dir, int *ret, const char *prog, ...) {
         
         execv(prog, args);
         
-        daemon_log(LOG_ERR, "execv(%s) failed: %s\n", prog, strerror(errno));
+        daemon_log(LOG_ERR, "execv(%s) failed: %s", prog, strerror(errno));
         
         _exit(EXIT_FAILURE);
     }
@@ -107,7 +111,8 @@ int daemon_exec(const char *dir, int *ret, const char *prog, ...) {
     
     FD_ZERO(&fds);
     FD_SET(p[0], &fds);
-    FD_SET(sigfd = daemon_signal_fd(), &fds);
+    sigfd = daemon_signal_fd();
+    FD_SET(sigfd, &fds);
 
     n = 0;
 
@@ -163,15 +168,25 @@ int daemon_exec(const char *dir, int *ret, const char *prog, ...) {
         buf[n] = 0;
         daemon_log(LOG_WARNING, "client: %s", buf); 
     }
-    
-    waitpid(pid, &r, 0);
-    
+
     close(p[0]);
     
-    if (!WIFEXITED(r))
-        return -1;
+    for (;;) {
+        if (waitpid(pid, &r, 0) < 0) {
 
-    if (ret)
-        *ret = WEXITSTATUS(r);
-    return 0;
+            if (errno == EINTR)
+                continue;
+
+            daemon_log(LOG_ERR, "waitpid(): %s", strerror(errno));
+            return -1;
+        } else {
+            if (!WIFEXITED(r))
+                return -1;
+
+            if (ret)
+                *ret = WEXITSTATUS(r);
+
+            return 0;
+        }
+    }
 }

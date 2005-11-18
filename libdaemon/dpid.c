@@ -1,21 +1,22 @@
-/* $Id: dpid.c 79 2005-06-04 19:07:59Z lennart $ */
+/* $Id: dpid.c 101 2005-11-18 20:39:12Z lennart $ */
 
 /*
  * This file is part of libdaemon.
  *
- * libdaemon is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * libdaemon is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
  *
  * libdaemon is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with libdaemon; if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with libdaemon; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
  */
 
 #ifdef HAVE_CONFIG_H
@@ -32,11 +33,16 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <sys/select.h>
 #include <fcntl.h>
 #include <stddef.h>
 
 #include "dpid.h"
 #include "dlog.h"
+
+#ifndef ETIME
+#define ETIME ETIMEDOUT /* For FreeBSD */
+#endif
 
 #define VARRUN "/var/run"
 
@@ -147,8 +153,10 @@ int daemon_pid_file_kill_wait(int s, int m) {
         int r;
         struct timeval tv = { 0, 100000 };
 
-        if (time(NULL) > t)
+        if (time(NULL) > t) {
+            errno = ETIME;
             return -1;
+        }
             
         if ((r = kill(pid, 0)) < 0 && errno != ESRCH)
             return -1;
@@ -168,10 +176,13 @@ int daemon_pid_file_create(void) {
     int locked = -1;
     char t[64];
     ssize_t l;
+    mode_t u;
+
+    u = umask(022);
 
     if (!(fn = daemon_pid_file_proc()))
         goto finish;
-
+    
     if ((fd = open(fn, O_CREAT|O_RDWR|O_EXCL, 0644)) < 0) {
         fprintf(stderr, "open(%s): %s", fn, strerror(errno));
         goto finish;
@@ -200,6 +211,8 @@ finish:
             
         close(fd);
     }
+    
+    umask(u);
     
     return ret;
 }

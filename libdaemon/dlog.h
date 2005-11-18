@@ -1,24 +1,25 @@
 #ifndef foodaemonloghfoo
 #define foodaemonloghfoo
 
-/* $Id: dlog.h 79 2005-06-04 19:07:59Z lennart $ */
+/* $Id: dlog.h 101 2005-11-18 20:39:12Z lennart $ */
 
 /*
  * This file is part of libdaemon.
  *
- * libdaemon is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * libdaemon is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
  *
  * libdaemon is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with libdaemon; if not, write to the Free Software Foundation,
- * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with libdaemon; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
  */
 
 #include <syslog.h>
@@ -48,13 +49,20 @@ extern enum daemon_log_flags daemon_log_use;
 
 /** Specifies the syslog identification, use daemon_ident_from_argv0()
  * to set this to a sensible value or generate your own. */
-extern char* daemon_log_ident;
+extern const char* daemon_log_ident;
+
+#ifdef __GNUC__
+/** A macro for making use of GCCs printf compilation warnings */
+#define DAEMON_GCC_PRINTF_ATTR(a,b) __attribute__ ((format (printf, a, b)))
+#else
+#define DAEMON_GCC_PRINTF_ATTR(a,b)
+#endif
 
 /** Log a message using printf format strings using the specified syslog priority
  * @param prio The syslog priority (PRIO_xxx constants)
  * @param t,... The text message to log
  */
-void daemon_log(int prio, const char* t, ...);
+void daemon_log(int prio, const char* t, ...) DAEMON_GCC_PRINTF_ATTR(2,3);
 
 /** Return a sensible syslog identification for daemon_log_ident
  * generated from argv[0]. This will return a pointer to the file name
