@@ -1,7 +1,7 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# $Id: configure.ac 101 2005-11-18 20:39:12Z lennart $
+# $Id: configure.ac 108 2005-11-24 13:38:53Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -21,7 +21,7 @@
 # USA
 
 AC_PREREQ(2.59)
-AC_INIT([libdaemon],[0.9],[mzqnrzba (at) 0pointer (dot) de])
+AC_INIT([libdaemon],[0.10],[mzqnrzba (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([libdaemon/dfork.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign 1.9 -Wall])
