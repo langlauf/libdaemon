@@ -1,4 +1,4 @@
-/* $Id: dlog.c 109 2005-11-24 13:44:19Z lennart $ */
+/* $Id: dlog.c 117 2007-06-11 15:34:47Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -26,16 +26,18 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 
 #include "dlog.h"
 
 enum daemon_log_flags daemon_log_use = DAEMON_LOG_AUTO|DAEMON_LOG_STDERR;
 const char* daemon_log_ident = NULL;
 
-void daemon_log(int prio, const char* template, ...) {
-    va_list arglist;
-    va_start(arglist, template);
-
+void daemon_logv(int prio, const char* template, va_list arglist) {
+    int saved_errno;
+    
+    saved_errno = errno;
+    
     if (daemon_log_use & DAEMON_LOG_SYSLOG) {
 	openlog(daemon_log_ident ? daemon_log_ident : "UNKNOWN", LOG_PID, LOG_DAEMON);
         vsyslog(prio | LOG_DAEMON, template, arglist);
@@ -51,7 +53,14 @@ void daemon_log(int prio, const char* template, ...) {
         fprintf(stdout, "\n");
     }
 
+    errno = saved_errno;
+}
+
+void daemon_log(int prio, const char* template, ...) {
+    va_list arglist;
     
+    va_start(arglist, template);
+    daemon_logv(prio, template, arglist);
     va_end(arglist);
 }
 

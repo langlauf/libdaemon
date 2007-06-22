@@ -1,7 +1,7 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# $Id: configure.ac 108 2005-11-24 13:38:53Z lennart $
+# $Id: configure.ac 122 2007-06-11 15:46:06Z lennart $
 
 # This file is part of libdaemon.
 #
@@ -21,7 +21,7 @@
 # USA
 
 AC_PREREQ(2.59)
-AC_INIT([libdaemon],[0.10],[mzqnrzba (at) 0pointer (dot) de])
+AC_INIT([libdaemon],[0.11],[mzqnrzba (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([libdaemon/dfork.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign 1.9 -Wall])
@@ -34,8 +34,8 @@ if type -p stow > /dev/null && test -d /usr/local/stow ; then
 fi
 
 # Checks for programs.
-AC_GNU_SOURCE
 AC_PROG_CC
+AC_GNU_SOURCE
 AC_PROG_CXX
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
@@ -98,15 +98,15 @@ AC_ARG_ENABLE(lynx,
   *) AC_MSG_ERROR(bad value ${enableval} for --disable-lynx) ;;
 esac],[lynx=yes])
 
-if test x$lynx = xyes ; then
+if test x$lynx != xno ; then
    AC_CHECK_PROG(have_lynx, lynx, yes, no)
 
-   if test x$have_lynx = xno ; then
-     AC_MSG_ERROR([*** Sorry, you have to install lynx or use --disable-lynx ***])
+   if test x$lynx = xyes && test x$have_lynx = xno ; then
+     AC_MSG_ERROR([*** Lynx enabled but couldn't find lynx ***])
    fi
 fi
 
-AM_CONDITIONAL([USE_LYNX], [test "x$lynx" = xyes])
+AM_CONDITIONAL([USE_LYNX], [test "x$lynx" != xno])
 
 AC_CONFIG_FILES([libdaemon/Makefile Makefile doc/Makefile doc/README.html doc/doxygen.conf examples/Makefile libdaemon.spec libdaemon.pc])
 AC_OUTPUT

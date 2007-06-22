@@ -1,4 +1,4 @@
-/* $Id: dsignal.c 101 2005-11-18 20:39:12Z lennart $ */
+/* $Id: dsignal.c 117 2007-06-11 15:34:47Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -50,7 +50,6 @@ static int _init(void) {
 
         if (daemon_nonblock(_signal_pipe[0], 1) < 0 || daemon_nonblock(_signal_pipe[1], 1) < 0)
             return -1;
-
     }
 
     return 0;
@@ -69,7 +68,7 @@ int daemon_signal_install(int s){
     }
 
     if (sigaddset(&ss, s) < 0) {
-        daemon_log(LOG_ERR, "sigaddyset(): %s", strerror(errno));
+        daemon_log(LOG_ERR, "sigaddset(): %s", strerror(errno));
         return -1;
     }
 
@@ -111,8 +110,7 @@ int daemon_signal_init(int s, ...) {
     }
             
     va_end(ap);
-
-
+ 
     return r;
 }
 
@@ -132,8 +130,7 @@ int daemon_signal_next(void) {
 
     if ((r = read(_signal_pipe[0], &s, sizeof(s))) == sizeof(s))
         return s;
-
-
+    
     if (r < 0) {
 
         if (errno == EAGAIN)

@@ -1,7 +1,7 @@
 #ifndef foodaemonloghfoo
 #define foodaemonloghfoo
 
-/* $Id: dlog.h 101 2005-11-18 20:39:12Z lennart $ */
+/* $Id: dlog.h 120 2007-06-11 15:42:47Z lennart $ */
 
 /*
  * This file is part of libdaemon.
@@ -23,6 +23,7 @@
  */
 
 #include <syslog.h>
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,7 +52,7 @@ extern enum daemon_log_flags daemon_log_use;
  * to set this to a sensible value or generate your own. */
 extern const char* daemon_log_ident;
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && ! defined(DAEMON_GCC_PRINTF_ATTR)
 /** A macro for making use of GCCs printf compilation warnings */
 #define DAEMON_GCC_PRINTF_ATTR(a,b) __attribute__ ((format (printf, a, b)))
 #else
@@ -63,6 +64,12 @@ extern const char* daemon_log_ident;
  * @param t,... The text message to log
  */
 void daemon_log(int prio, const char* t, ...) DAEMON_GCC_PRINTF_ATTR(2,3);
+
+/** This variable is defined to 1 iff daemon_logv() is supported.*/
+#define DAEMON_LOGV_AVAILABLE 1
+
+/** Same as daemon_logv, but without variadic arguments */
+void daemon_logv(int prio, const char* t, va_list ap);
 
 /** Return a sensible syslog identification for daemon_log_ident
  * generated from argv[0]. This will return a pointer to the file name
