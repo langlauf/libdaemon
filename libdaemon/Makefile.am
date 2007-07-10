@@ -1,4 +1,4 @@
-# $Id: Makefile.am 122 2007-06-11 15:46:06Z lennart $
+# $Id: Makefile.am 128 2007-07-10 16:55:39Z lennart $
 #
 # This file is part of libdaemon.
 #
@@ -38,4 +38,4 @@ libdaemon_la_SOURCES = \
 	daemon.h \
 	$(pkg_include_HEADERS)
 
-libdaemon_la_LDFLAGS = -version-info 3:0:3
+libdaemon_la_LDFLAGS = -version-info 3:1:3
