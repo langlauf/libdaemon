@@ -1,26 +1,25 @@
 #ifndef foodaemonloghfoo
 #define foodaemonloghfoo
 
-/* $Id: dlog.h 120 2007-06-11 15:42:47Z lennart $ */
+/***
+  This file is part of libdaemon.
 
-/*
- * This file is part of libdaemon.
- *
- * libdaemon is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
- *
- * libdaemon is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libdaemon; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA
- */
+  Copyright 2003-2008 Lennart Poettering
+
+  libdaemon is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 2.1 of the
+  License, or (at your option) any later version.
+
+  libdaemon is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with libdaemon. If not, see
+  <http://www.gnu.org/licenses/>.
+***/
 
 #include <syslog.h>
 #include <stdarg.h>
@@ -68,7 +67,10 @@ void daemon_log(int prio, const char* t, ...) DAEMON_GCC_PRINTF_ATTR(2,3);
 /** This variable is defined to 1 iff daemon_logv() is supported.*/
 #define DAEMON_LOGV_AVAILABLE 1
 
-/** Same as daemon_logv, but without variadic arguments */
+/** Same as daemon_log(), but without variadic arguments
+ * @since 0.11
+ * @see DAEMON_LOGV_AVAILABLE
+ */
 void daemon_logv(int prio, const char* t, va_list ap);
 
 /** Return a sensible syslog identification for daemon_log_ident

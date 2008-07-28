@@ -1,23 +1,22 @@
-/* $Id: dpid.c 125 2007-06-22 15:09:47Z lennart $ */
+/***
+  This file is part of libdaemon.
 
-/*
- * This file is part of libdaemon.
- *
- * libdaemon is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
- *
- * libdaemon is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with libdaemon; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA
- */
+  Copyright 2003-2008 Lennart Poettering
+
+  libdaemon is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 2.1 of the
+  License, or (at your option) any later version.
+
+  libdaemon is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with libdaemon. If not, see
+  <http://www.gnu.org/licenses/>.
+***/
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -48,14 +47,21 @@
 #define PATH_MAX 512
 #endif
 
-#define VARRUN "/var/run"
+#define VARRUN LOCALSTATEDIR "/run"
 
 const char *daemon_pid_file_ident = NULL;
 daemon_pid_file_proc_t daemon_pid_file_proc = daemon_pid_file_proc_default;
 
 const char *daemon_pid_file_proc_default(void) {
+#ifdef HAVE_ASPRINTF
+    static char *fn = NULL;
+    free(fn);
+    asprintf(&fn,  "%s/%s.pid", VARRUN, daemon_pid_file_ident ? daemon_pid_file_ident : "unknown");
+#else
     static char fn[PATH_MAX];
     snprintf(fn, sizeof(fn), "%s/%s.pid", VARRUN, daemon_pid_file_ident ? daemon_pid_file_ident : "unknown");
+#endif
+
     return fn;
 }
 
@@ -67,8 +73,16 @@ static int lock_file(int fd, int enable) {
     f.l_whence = SEEK_SET;
     f.l_start = 0;
     f.l_len = 0;
-    
+
     if (fcntl(fd, F_SETLKW, &f) < 0) {
+
+        if (enable && errno == EBADF) {
+            f.l_type = F_RDLCK;
+
+            if (fcntl(fd, F_SETLKW, &f) >= 0)
+                return 0;
+        }
+
         daemon_log(LOG_WARNING, "fcntl(F_SETLKW) failed: %s", strerror(errno));
         return -1;
     }
@@ -91,18 +105,22 @@ pid_t daemon_pid_file_is_running(void) {
     }
 
     if ((fd = open(fn, O_RDWR, 0644)) < 0) {
-        if (errno != ENOENT)
-            daemon_log(LOG_WARNING, "Failed to open PID file: %s", strerror(errno));
+        if ((fd = open(fn, O_RDONLY, 0644)) < 0) {
+            if (errno != ENOENT)
+                daemon_log(LOG_WARNING, "Failed to open PID file: %s", strerror(errno));
 
-        goto finish;
+            goto finish;
+        }
     }
 
     if ((locked = lock_file(fd, 1)) < 0)
         goto finish;
-    
+
     if ((l = read(fd, txt, sizeof(txt)-1)) < 0) {
+        int saved_errno = errno;
         daemon_log(LOG_WARNING, "read(): %s", strerror(errno));
         unlink(fn);
+        errno = saved_errno;
         goto finish;
     }
 
@@ -112,7 +130,7 @@ pid_t daemon_pid_file_is_running(void) {
     errno = 0;
     lpid = strtol(txt, &e, 10);
     pid = (pid_t) lpid;
-    
+
     if (errno != 0 || !e || *e || (long) pid != lpid) {
         daemon_log(LOG_WARNING, "PID file corrupt, removing. (%s)", fn);
         unlink(fn);
@@ -122,31 +140,31 @@ pid_t daemon_pid_file_is_running(void) {
 
     if (kill(pid, 0) != 0 && errno != EPERM) {
         int saved_errno = errno;
-        daemon_log(LOG_WARNING, "Process %lu died: %s; removing PID file. (%s)", (unsigned long) pid, strerror(errno), fn);
+        daemon_log(LOG_WARNING, "Process %lu died: %s; trying to remove PID file. (%s)", (unsigned long) pid, strerror(errno), fn);
         unlink(fn);
         errno = saved_errno;
         goto finish;
     }
 
     ret = pid;
-    
+
 finish:
 
     if (fd >= 0) {
         int saved_errno = errno;
         if (locked >= 0)
             lock_file(fd, 0);
-        errno = saved_errno;
         close(fd);
+        errno = saved_errno;
     }
-    
+
     return ret;
 }
 
 int daemon_pid_file_kill(int s) {
     pid_t pid;
-    
-    if ((pid = daemon_pid_file_is_running()) < 0)
+
+    if ((pid = daemon_pid_file_is_running()) == (pid_t) -1)
         return -1;
 
     if (kill(pid, s) < 0)
@@ -158,7 +176,7 @@ int daemon_pid_file_kill(int s) {
 int daemon_pid_file_kill_wait(int s, int m) {
     pid_t pid;
     time_t t;
-    
+
     if ((pid = daemon_pid_file_is_running()) < 0)
         return -1;
 
@@ -175,7 +193,7 @@ int daemon_pid_file_kill_wait(int s, int m) {
             errno = ETIME;
             return -1;
         }
-            
+
         if ((r = kill(pid, 0)) < 0 && errno != ESRCH)
             return -1;
 
@@ -202,7 +220,7 @@ int daemon_pid_file_create(void) {
         errno = EINVAL;
         goto finish;
     }
-    
+
     if ((fd = open(fn, O_CREAT|O_RDWR|O_EXCL, 0644)) < 0) {
         daemon_log(LOG_ERR, "open(%s): %s", fn, strerror(errno));
         goto finish;
@@ -231,30 +249,26 @@ finish:
 
     if (fd >= 0) {
         int saved_errno = errno;
-        
+
         if (locked >= 0)
             lock_file(fd, 0);
-            
+
         close(fd);
         errno = saved_errno;
     }
-    
+
     umask(u);
-    
+
     return ret;
 }
 
 int daemon_pid_file_remove(void) {
     const char *fn;
-    
+
     if (!(fn = daemon_pid_file_proc())) {
         errno = EINVAL;
         return -1;
     }
-    
-    if (unlink(fn) < 0)
-        return -1;
 
-    return 0;
+    return unlink(fn);
 }
-

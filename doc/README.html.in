@@ -10,7 +10,7 @@
 <body>
 <h1><a name="top">libdaemon @PACKAGE_VERSION@</a></h1>
 
-<p><i>Copyright 2003-2007 Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;</i></p>
+<p><i>Copyright 2003-2008 Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;</i></p>
 
 <ul class="toc">
     <li><a href="#license">License</a></li>
@@ -26,21 +26,20 @@
 
 <h2><a name="license">License</a></h2>
 
-<p>This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation, either version 2.1 of the
+License, or (at your option) any later version.</p>
 
-<p>This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<p>This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 Lesser General Public License for more details.</p>
 
-<p>You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA</p>
-
 <h2><a name="news">News</a></h2>
+
+<div class="news-date">Tue Jul 29 2008: </div>
+<p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.13.tar.gz">Version 0.13</a> released; changes include: add <tt>daemon_reset_sigs()</tt> and <tt>daemon_unblock_sigs()</tt> calls for resetting signal handlers to sensible states; improve error handling.</p>
 
 <div class="news-date">Tue Jul 10 2007: </div>
 <p class="news-text"><a href="@PACKAGE_URL@libdaemon-0.12.tar.gz">Version 0.12</a> released; changes include: make <tt>daemon_close_all()</tt> actually work properly.</p>
@@ -85,7 +84,7 @@ daemons. It consists of the following parts:</p>
 
 <ul>
   <li>A wrapper around <tt>fork()</tt> which does the correct
-  daemonization procedure of a process</lI>
+  daemonization procedure of a process</li>
 
   <li>A wrapper around <tt>syslog()</tt> for simpler and compatible
   log output to Syslog or STDERR</li>
@@ -149,17 +148,16 @@ compilation and <tt>make install</tt> (as root) for installation of
 
 <p>The newest release is always available from <a href="@PACKAGE_URL@">@PACKAGE_URL@</a></p>
 
-<p>Get <tt>libdaemon</tt>'s development sources from the <a href="http://subversion.tigris.org/">Subversion</a> <a href="svn://svn.0pointer.de/libdaemon">repository</a> (<a href="http://0pointer.de/cgi-bin/viewcvs.cgi/?root=libdaemon">viewcvs</a>): </p>
+<p>Get <tt>libdaemon</tt>'s development sources from the <a href="http://git.or.cz/">GIT</a> <a href="git://git.0pointer.de/libdaemon">repository</a> (<a href="http://git.0pointer.de/?p=libdaemon.git">gitweb</a>): </p>
 
-<pre>svn checkout svn://svn.0pointer.de/libdaemon/trunk libdaemon</pre>
+<pre>git clone git://git.0pointer.de/libdaemon</pre>
 
 <p>You may find an up to date Debian package of <tt>libdaemon</tt> on the <a href="http://packages.debian.org/libdaemon0">Debian package repository</a>.</p>
 
 <p>If you want to be notified whenever I release a new version of this software use the subscription feature of <a href="http://freshmeat.net/projects/libdaemon/">Freshmeat</a>.</p>
 
 <hr/>
-<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, July 2007</address>
-<div class="grey"><i>$Id: README.html.in 129 2007-07-10 17:48:11Z lennart $</i></div>
+<address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, July 2008</address>
 
 </body>
 </html>
