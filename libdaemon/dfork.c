@@ -42,6 +42,14 @@
 #include "dnonblock.h"
 #include "dlog.h"
 
+#if defined(_NSIG) /* On glibc NSIG does not count RT signals */
+# define SIGNAL_UPPER_BOUND _NSIG
+#elif defined(NSIG) /* Solaris defines just this */
+# define SIGNAL_UPPER_BOUND NSIG
+#else
+# error "Unknown upper bound for signals"
+#endif
+
 static int _daemon_retval_pipe[2] = { -1, -1 };
 
 static int _null_open(int f, int fd) {
@@ -182,7 +190,10 @@ pid_t daemon_fork(void) {
     } else if (pid == 0) {
         pid_t dpid;
 
-        /* First child */
+        /* First child. Now we are sure not to be a session leader or
+         * process group leader anymore, i.e. we know that setsid()
+         * will succeed. */
+
         if (daemon_log_use & DAEMON_LOG_AUTO)
             daemon_log_use = DAEMON_LOG_SYSLOG;
 
@@ -194,6 +205,7 @@ pid_t daemon_fork(void) {
         /* Move file descriptors up*/
         if (move_fd_up(&pipe_fds[1]) < 0)
             goto fail;
+
         if (_daemon_retval_pipe[0] >= 0 && move_fd_up(&_daemon_retval_pipe[0]) < 0)
             goto fail;
         if (_daemon_retval_pipe[1] >= 0 && move_fd_up(&_daemon_retval_pipe[1]) < 0)
@@ -214,9 +226,16 @@ pid_t daemon_fork(void) {
             goto fail;
         }
 
-        setsid();
-        setpgid(0, 0);
-        umask(0777);
+        /* Create a new session. This will create a new session and a
+         * new process group for us and we will be the ledaer of
+         * both. This should always succeed because we cannot be the
+         * process group leader because we just forked. */
+        if (setsid() < 0) {
+            daemon_log(LOG_ERR, "setsid() failed: %s", strerror(errno));
+            goto fail;
+        }
+
+        umask(0077);
 
         if (chdir("/") < 0) {
             daemon_log(LOG_ERR, "chdir() failed: %s", strerror(errno));
@@ -228,8 +247,12 @@ pid_t daemon_fork(void) {
             goto fail;
 
         } else if (pid == 0) {
-            int tty_fd;
-            /* Second child */
+            /* Second child. Our father will exit right-away. That way
+             * we can be sure that we are a child of init now, even if
+             * the process which spawned us stays around for a longer
+             * time. Also, since we are no session leader anymore we
+             * can be sure that we will never acquire a controlling
+             * TTY. */
 
             if (sigaction(SIGCHLD, &sa_old, NULL) < 0) {
                 daemon_log(LOG_ERR, "close() failed: %s", strerror(errno));
@@ -256,15 +279,6 @@ pid_t daemon_fork(void) {
                 goto fail;
             }
 
-            setsid();
-            setpgid(0, 0);
-
-#ifdef TIOCNOTTY
-            if ((tty_fd = open("/dev/tty", O_RDWR)) >= 0) {
-                ioctl(tty_fd, TIOCNOTTY, NULL);
-                close(tty_fd);
-            }
-#endif
             dpid = getpid();
             if (atomic_write(pipe_fds[1], &dpid, sizeof(dpid)) != sizeof(dpid)) {
                 daemon_log(LOG_ERR, "write() failed: %s", strerror(errno));
@@ -314,7 +328,9 @@ pid_t daemon_fork(void) {
         if (atomic_read(pipe_fds[0], &dpid, sizeof(dpid)) != sizeof(dpid)) {
             daemon_log(LOG_ERR, "Failed to read daemon PID.");
             dpid = (pid_t) -1;
-        }
+            errno = EINVAL;
+        } else if (dpid == (pid_t) -1)
+            errno = EIO;
 
         saved_errno = errno;
         close(pipe_fds[0]);
@@ -469,10 +485,10 @@ int daemon_close_all(int except_fd, ...) {
 /** Same as daemon_close_all but takes an array of fds, terminated by -1 */
 int daemon_close_allv(const int except_fds[]) {
     struct rlimit rl;
-    int fd;
-    int saved_errno;
+    int fd, maxfd;
 
 #ifdef __linux__
+    int saved_errno;
 
     DIR *d;
 
@@ -505,7 +521,7 @@ int daemon_close_allv(const int except_fds[]) {
                 return -1;
             }
 
-            if (fd <= 3)
+            if (fd < 3)
                 continue;
 
             if (fd == dirfd(d))
@@ -531,6 +547,9 @@ int daemon_close_allv(const int except_fds[]) {
 
                 return -1;
             }
+
+            if (fd == _daemon_retval_pipe[0])
+                _daemon_retval_pipe[0] = -1;    /* mark as closed */
         }
 
         closedir(d);
@@ -539,14 +558,13 @@ int daemon_close_allv(const int except_fds[]) {
 
 #endif
 
-    if (getrlimit(RLIMIT_NOFILE, &rl) < 0)
-        return -1;
+    if (getrlimit(RLIMIT_NOFILE, &rl) > 0)
+        maxfd = (int) rl.rlim_max;
+    else
+        maxfd = sysconf(_SC_OPEN_MAX);
 
-    for (fd = 0; fd < (int) rl.rlim_max; fd++) {
+    for (fd = 3; fd < maxfd; fd++) {
         int i, found;
-
-        if (fd <= 3)
-            continue;
 
         if (fd == _daemon_retval_pipe[1])
             continue;
@@ -563,6 +581,9 @@ int daemon_close_allv(const int except_fds[]) {
 
         if (close(fd) < 0 && errno != EBADF)
             return -1;
+
+        if (fd == _daemon_retval_pipe[0])
+            _daemon_retval_pipe[0] = -1;        /* mark as closed */
     }
 
     return 0;
@@ -665,7 +686,7 @@ int daemon_reset_sigs(int except, ...) {
 int daemon_reset_sigsv(const int except[]) {
     int sig;
 
-    for (sig = 1; sig < _NSIG; sig++) {
+    for (sig = 1; sig < SIGNAL_UPPER_BOUND; sig++) {
         int reset = 1;
 
         switch (sig) {

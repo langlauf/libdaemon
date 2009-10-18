@@ -54,10 +54,10 @@ int main(int argc, char *argv[]) {
     if (argc >= 2 && !strcmp(argv[1], "-k")) {
         int ret;
 
-        /* Kill daemon with SIGINT */
+        /* Kill daemon with SIGTERM */
 
         /* Check if the new function daemon_pid_file_kill_wait() is available, if it is, use it. */
-        if ((ret = daemon_pid_file_kill_wait(SIGINT, 5)) < 0)
+        if ((ret = daemon_pid_file_kill_wait(SIGTERM, 5)) < 0)
             daemon_log(LOG_WARNING, "Failed to kill daemon: %s", strerror(errno));
 
         return ret < 0 ? 1 : 0;
@@ -70,7 +70,10 @@ int main(int argc, char *argv[]) {
     }
 
     /* Prepare for return value passing from the initialization procedure of the daemon process */
-    daemon_retval_init();
+    if (daemon_retval_init() < 0) {
+        daemon_log(LOG_ERR, "Failed to create pipe.");
+        return 1;
+    }
 
     /* Do the fork */
     if ((pid = daemon_fork()) < 0) {
@@ -146,7 +149,7 @@ int main(int argc, char *argv[]) {
             }
 
             /* Check if a signal has been recieved */
-            if (FD_ISSET(fd, &fds)) {
+            if (FD_ISSET(fd, &fds2)) {
                 int sig;
 
                 /* Get signal */
@@ -161,7 +164,7 @@ int main(int argc, char *argv[]) {
                     case SIGINT:
                     case SIGQUIT:
                     case SIGTERM:
-                        daemon_log(LOG_WARNING, "Got SIGINT, SIGQUIT or SIGTERM");
+                        daemon_log(LOG_WARNING, "Got SIGINT, SIGQUIT or SIGTERM.");
                         quit = 1;
                         break;
 

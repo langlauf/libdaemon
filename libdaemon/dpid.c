@@ -35,6 +35,7 @@
 #include <sys/select.h>
 #include <fcntl.h>
 #include <stddef.h>
+#include <sys/time.h>
 
 #include "dpid.h"
 #include "dlog.h"
@@ -235,7 +236,8 @@ int daemon_pid_file_create(void) {
 
     snprintf(t, sizeof(t), "%lu\n", (unsigned long) getpid());
 
-    if (write(fd, t, l = strlen(t)) != l) {
+    l = strlen(t);
+    if (write(fd, t, l) != l) {
         int saved_errno = errno;
         daemon_log(LOG_WARNING, "write(): %s", strerror(errno));
         unlink(fn);
